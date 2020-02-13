@@ -1,12 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Purchase Request App</title>
-</head>
-<body>
-    <h1>Welcome to the Purchase Request App</h1>
-</body>
-</html>
+{% extends "public/base_page.html" %}
+
+{% block title %}PROQR - Login{% endblock %}
+
+{% block head %}
+
+<!-- Custom styles for this template -->
+<link href="/static/css/floating-labels.css" rel="stylesheet">
+{% endblock %}
+
+{% block main %}
+
+<div class="container mx-auto">
+    <form class="form-signin mx-auto" action="http:">
+        <img src="/static/img/logo.png" style="display:flex; margin:auto; max-height:200px; margin-bottom:1.5rem;">
+        <div class="text-center mb-4">
+            <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+        </div>
+        <div class="form-label-group">
+            <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+            <label for="inputEmail">Email address</label>
+        </div>
+
+        <div class="form-label-group">
+            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+            <label for="inputPassword">Password</label>
+        </div>
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+    </form>
+</div>
+
+{% endblock %}
