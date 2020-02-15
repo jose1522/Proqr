@@ -1,30 +1,37 @@
 {% extends "public/base_page.html" %}
 
-{% block title %}PROQR - Home{% endblock %}
+{% block title %}PROQR{% endblock %}
 
-{% block header %}
-
-{% endblock%}
 
 {% block main %}
 
 
-<nav class="d-flex flex-column flex-md-row align-items-center p-2 px-md-4 mb-3 bg-dark border-bottom shadow-sm">
-    <h5 class="my-0 font-weight-normal text-light" style="margin-right:0px">PROQR</h5>
+<nav class="d-flex flex-md-row p-2 px-md-4 mb-3 bg-dark border-bottom shadow-sm">
+
+    <!--
     <ul class="navbar-nav mx-auto" style="text-align:center;">
         <nav class="my-2 my-md-0">
-            <a class="p-2 text-light btn shadow-sm"  href="#">Home</a>
-            <a class="p-2 text-light btn shadow-sm"  href="#">My requests</a>
-            <a class="p-2 text-light btn shadow-sm"  href="#">Purchase Orders</a>
-            <a class="p-2 text-light btn shadow-sm"  href="#">Reporting</a>
-            <a class="p-2 text-light btn shadow-sm"  href="#">Profile</a>
-            <a class="p-2 text-light btn shadow-sm"  href="#">Admin</a>
+            <a class="p-2 text-light btn shadow-sm"  href="/home">Home</a>
+            <a class="p-2 text-light btn shadow-sm"  href="/requests">My requests</a>
+            <a class="p-2 text-light btn shadow-sm"  href="/purchase_order">Purchase Orders</a>
+            <a class="p-2 text-light btn shadow-sm"  href="/reporting">Reporting</a>
+            <a class="p-2 text-light btn shadow-sm"  href="/profile">Profile</a>
+            <a class="p-2 text-light btn shadow-sm"  href="/admin">Admin</a>
         </nav>
     </ul>
-    <a class="btn btn-secondary my-2 my-sm-0" href="/">Logout</a>
+    -->
+
+    <div class="my-auto mr-auto">
+        <a href="/home" class="navbar-brand font-weight-normal text-light" style="margin-right:0px">PROQR</a>
+    </div>
+    <div>
+        <a class="btn btn-secondary" href="/">Logout</a>
+    </div>
+
+
 </nav>
 
 <div class="container">
-{% block home_content%}{% endblock %}
+    {% block home_content%}{% endblock %}
 </div>
 {% endblock %}
