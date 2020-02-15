@@ -1,4 +1,4 @@
-from app import app  #
+from app import app  # Imports object from __init__.py
 from flask import render_template
 
 
