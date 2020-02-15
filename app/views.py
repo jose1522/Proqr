@@ -50,3 +50,7 @@ def test():
     dictionary.update({"key","value"})
     make_response(200, dictionary)
     return render_template("public/home.html")
+
+@app.route("/user/new")
+def new_user():
+    return render_template("public/user_form.html")
