@@ -6,6 +6,11 @@ def index():
     return render_template("public/index.html")
 
 
+@app.route("/logout")
+def logout():
+    return render_template("public/index.html")
+
+
 @app.route("/home")
 def home():
     return render_template("public/home.html")
@@ -37,4 +42,11 @@ def admin():
 
 @app.route("/reporting")
 def reporting():
+    return render_template("public/home.html")
+
+@app.route("/test")
+def test():
+    dictionary = {}
+    dictionary.update({"key","value"})
+    make_response(200, dictionary)
     return render_template("public/home.html")
