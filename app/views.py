@@ -54,3 +54,7 @@ def test():
 @app.route("/user/new")
 def new_user():
     return render_template("public/user_form.html")
+
+@app.route("/user/edit")
+def edit_user():
+    return render_template("public/user_form.html")
