@@ -1,0 +1,37 @@
+{% extends "public/base_home.html" %}
+
+{% block home_content %}
+
+<style>
+    @media (max-width: 991px) {
+        .btn, .btn-group {
+            width:100%;
+            margin-bottom: 0.5em;
+        }
+        #btn_back_form{
+            width:100%;
+            padding-left: 0px;
+            padding-right: 0px;
+        }
+        #logoutButton{
+            margin-bottom: 0px;
+        }
+    }
+</style>
+
+<div class="d-flex flex-row justify-content-center flex-wrap">
+
+    <div class="mx-1 mr-8 bd-highlight" id="btn_back_form">
+        <a class="btn btn-secondary" href="/home">Go back</a>
+    </div>
+
+    <div class="mx-1 p-2 bd-highlightcontainer p-4" style=" width: 100%; max-width: 720px; background-color:rgb(242, 242, 242); border-radius: 1em;"  >
+        <form >
+            {% block form%}
+            {% endblock %}
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}

@@ -18,7 +18,11 @@ def home():
 
 @app.route("/purchase_order/new")
 def newPurchaseOrder():
-    return render_template("public/purchase_form.html")
+    return render_template("public/purchase_form.html", isIndex=True)
+
+@app.route("/purchase_order/modify")
+def modifyPurchaseOrder():
+    return render_template("public/purchase_form.html", isIndex=False)
 
 
 @app.route("/purchase_order")
@@ -50,3 +54,11 @@ def test():
     dictionary.update({"key","value"})
     make_response(200, dictionary)
     return render_template("public/home.html")
+
+@app.route("/user/new")
+def new_user():
+    return render_template("public/user_form.html", isIndex=True)
+
+@app.route("/user/modify")
+def edit_user():
+    return render_template("public/user_form.html", isIndex=False)
