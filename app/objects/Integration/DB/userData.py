@@ -5,12 +5,13 @@ from app.objects.user import User
 
 
 def FetchUserData(id=0):
+    key = readDBKey()
 
     url = "https://jskr4ovkybl0gsf-db202002091757.adb.us-ashburn-1.oraclecloudapps.com/ords/tables/api/users"
 
     headers = {
         'X-ID': str(id),
-        'Authorization': "Basic UFJPUVJfREVWOiY5KllPMGhEcmJzSg=="
+        'Authorization': "Basic {0}".format(key)
     }
 
     response = requests.request("GET", url, headers=headers)
