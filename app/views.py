@@ -68,6 +68,7 @@ def reporting():
 def new_user():
     return render_template("public/user_form.html",
                            isIndex=True,
+                           showID = 'none',
                            showPassword='flex', # Shows the password field
                            userId="",
                            firstName="",
@@ -81,6 +82,7 @@ def user_info(id):
     user = FetchUserData(id)
     return render_template("public/user_form.html",
                            isIndex=False,
+                           showID='flex',
                            showPassword='none', # Hides password
                            userId=user.userId,
                            firstName=user.firstName,
@@ -93,6 +95,7 @@ def user_info(id):
 def edit_user():
     return render_template("public/user_form.html",
                            isIndex=False,
+                           showID='flex',
                            showPassword='none',
                            userId="",
                            firstName="",
@@ -105,6 +108,7 @@ def edit_user():
 def delete_user():
     return render_template("public/user_form.html",
                            isIndex=False,
+                           showID='flex',
                            showPassword='none',
                            userId="",
                            firstName="",
