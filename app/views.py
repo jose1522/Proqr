@@ -3,6 +3,8 @@ from flask import render_template, url_for, session, jsonify, make_response, g, 
 from flask import request as req
 from app.objects.Integration.DB.login import UserLogin
 from app.objects.Integration.DB.userData import FetchUserData
+from app.objects.Integration.DB.modifyUser import ModifyUser
+from app.objects.user import User
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
@@ -91,17 +93,32 @@ def user_info(id):
                            password=user.password)
 
 
-@app.route("/user/modify")
+@app.route("/user/modify", methods=['GET','POST'])
 def edit_user():
-    return render_template("public/user_form.html",
-                           isIndex=False,
-                           showID='flex',
-                           showPassword='none',
-                           userId="",
-                           firstName="",
-                           lastName="",
-                           email="",
-                           password="")
+    if req.method == 'POST':
+        form = req.form
+        id = form['userUserID']
+        name = form['userUserFirstName']
+        lastName = form['userUserLastName']
+        email = form['userUserEmail']
+        role = form['userUserPassword']
+
+        if id:
+            user = User(userid=id, firstname=name, lastname=lastName, email=email, role=1) # to do: modify role
+            ModifyUser(user)
+            return redirect("/user/{0}".format(id))
+        else:
+            return redirect(url_for('home'))
+    else:
+        return render_template("public/user_form.html",
+                               isIndex=False,
+                               showID='flex',
+                               showPassword='none',
+                               userId="",
+                               firstName="",
+                               lastName="",
+                               email="",
+                               password="")
 
 
 @app.route("/user/delete")
