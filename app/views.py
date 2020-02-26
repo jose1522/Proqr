@@ -5,6 +5,7 @@ from app.objects.Integration.DB.login import UserLogin
 from app.objects.Integration.DB.userData import FetchUserData
 from app.objects.Integration.DB.modifyUser import ModifyUser
 from app.objects.user import User
+from app.objects.Integration.DB.userList import UserList
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
@@ -91,6 +92,14 @@ def user_info(id):
                            lastName=user.lastName,
                            email=user.email,
                            password=user.password)
+
+
+@app.route("/user/all")
+def user_list():
+    uList = UserList()
+    uList.FetchUserList()
+
+    return render_template("public/user_table.html", users=uList.users)
 
 
 @app.route("/user/modify", methods=['GET','POST'])
