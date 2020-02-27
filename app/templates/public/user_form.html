@@ -3,10 +3,10 @@
 <!-- Start of form row -->
 
             <!-- Start of form row -->
-            <div class="form-row">
+            <div class="form-row" style="display: {{showID}};">
                 <div class="form-group col-md-12">
                     <label for="userUserID">ID</label>
-                    <input class="form-control" type="text" id="userUserID" placeholder="Enter the user's id">
+                    <input class="form-control" type="text" name="userUserID"  readonly value={{ userId }}>
                 </div>
             </div>
             <!-- End of form row -->
@@ -15,7 +15,7 @@
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label for="userUserFirstName">First Name</label>
-                    <input class="form-control" type="text" id="userUserFirstName" placeholder="Enter the user's first name">
+                    <input class="form-control" type="text" name="userUserFirstName" placeholder="Enter the user's first name" value="{{ firstName }}">
                 </div>
             </div>
             <!-- End of form row -->
@@ -24,7 +24,7 @@
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label for="userUserLastName">Last Name</label>
-                    <input class="form-control" type="text" id="userUserLastName" placeholder="Enter the user's last name">
+                    <input class="form-control" type="text" name="userUserLastName" placeholder="Enter the user's last name" value="{{ lastName }}">
                 </div>
             </div>
             <!-- End of form row -->
@@ -33,16 +33,16 @@
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label for="userUserEmail">Email</label>
-                    <input class="form-control" type="text" id="userUserEmail" placeholder="Enter the user's email">
+                    <input class="form-control" type="text" name="userUserEmail" placeholder="Enter the user's email" value="{{ email }}">
                 </div>
             </div>
             <!-- End of form row -->
 
             <!-- Start of form row -->
-            <div class="form-row">
+            <div class="form-row" style="display: {{showPassword}};">
                 <div class="form-group col-md-12">
                     <label for="userUserPassword">Password</label>
-                    <input class="form-control" type="text" id="userUserPassword" placeholder="Enter the user's password">
+                    <input class="form-control" type="text" name="userUserPassword" placeholder="Enter the user's password" value="{{ password }}">
                 </div>
             </div>
             <!-- End of form row -->
@@ -62,7 +62,7 @@
             <!-- End of form row -->
 
             <!-- Start of form row -->
-            <div class="form-row">
+            <div class="form-row" style="display: none;">
                 <div class="form-group col-md-12">
                     <label for="inputSupervisor">Supervisor</label>
                     <select id="inputSupervisor" class="form-control">
@@ -77,9 +77,9 @@
 
             <!-- Submit button -->
             {% if isIndex %}
-                <button type="button" class="btn btn-primary">Add User</button>
+                <button type="submit" class="btn btn-primary" formaction="/user/add">Add User</button>
             {% else %}
-            <button type="button" class="btn btn-primary">Save</button>
-            <button type="button" class="btn btn-danger">Delete</button>
+                <button type="submit" class="btn btn-primary" formaction="/user/modify">Save</button>
+                <button type="submit" class="btn btn-danger" formaction="/user/delete">Delete</button>
             {% endif %}
 {%endblock%}
