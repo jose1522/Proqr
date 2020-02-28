@@ -51,11 +51,10 @@
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label for="inputRole">Role</label>
-                    <select id="inputRole" class="form-control">
-                        <option selected>Choose...</option>
-                        <option>Buyer</option>
-                        <option>Chief Approver</option>
-                        <option>Financial Approver</option>
+                    <select id="inputRole" name="inputRole" class="form-control">
+                        {% for roleItem in roleList %}
+                        <option {% if role==roleItem %} selected="selected"{% endif %}>{{roleItem}}</option>    
+                        {% endfor %}
                     </select>
                 </div>
             </div>
@@ -80,6 +79,7 @@
                 <button type="submit" class="btn btn-primary" formaction="/user/add">Add User</button>
             {% else %}
                 <button type="submit" class="btn btn-primary" formaction="/user/modify">Save</button>
+                <button type="submit" class="btn btn-primary" formaction="/recover_password">Recover Password</button>
                 <button type="submit" class="btn btn-danger" formaction="/user/delete">Delete</button>
             {% endif %}
 {%endblock%}
