@@ -114,7 +114,8 @@ def user_info(id):
                            firstName=user.firstName,
                            lastName=user.lastName,
                            email=user.email,
-                           password=user.password)
+                           password=user.password,
+                           role=roleNumberToString(user.role))
 
 
 @app.route("/user/all")
@@ -133,10 +134,10 @@ def edit_user():
         name = form['userUserFirstName']
         lastName = form['userUserLastName']
         email = form['userUserEmail']
-        role = 2
+        role = form['inputRole']
 
         if id:
-            user = User(userid=id, firstname=name, lastname=lastName, email=email, role=roleNumberToString(role)) # to do: modify role
+            user = User(userid=id, firstname=name, lastname=lastName, email=email, role=roleStringToNumber(role)) # to do: modify role
             print(user.role)
             ModifyUser(user)
             return redirect("/user/{0}".format(id))
@@ -185,11 +186,10 @@ def add_user():
         name = form['userUserFirstName']
         lastName = form['userUserLastName']
         email = form['userUserEmail']
-        role = 'Buyer'
+        role = form['inputRole']
         
         # password = form['userUserPassword'] # Generating password automatically
-        #role = form['inputRole']
-        user = User(firstname=name, lastname=lastName, email=email, role=1) # to do: modify role
+        user = User(firstname=name, lastname=lastName, email=email, role=roleStringToNumber(role))  # to do: modify role
         print(user.role)
         AddUser(user)
   
