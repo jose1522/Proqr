@@ -6,6 +6,7 @@ from app.objects.Integration.DB.userData import FetchUserData
 from app.objects.Integration.DB.modifyUser import ModifyUser
 from app.objects.Integration.DB.deleteUser import DeleteUser
 from app.objects.Integration.DB.addUser import AddUser
+from app.objects.Integration.DB.recoverPassword import RecoverPassword
 from app.objects.user import User
 from app.objects.Integration.DB.userList import UserList
 
@@ -22,6 +23,24 @@ def index():
             return redirect(url_for('home'))
         else:
             return redirect(url_for('index'))
+
+
+@app.route("/recover_password", methods=['POST'])
+def recover_password():
+    form = req.form
+    r = req
+    if 'userUserID' in form:
+        id = form['userUserID']
+        u = User(userid=id)
+        RecoverPassword(u)
+    elif 'recoveryEmail' in form:
+        email = form['recoveryEmail']
+        u = User(email=email)
+        RecoverPassword(u)
+    else:
+        pass
+    url = req.referrer
+    return redirect(url)
 
 
 @app.route("/logout")
@@ -163,10 +182,10 @@ def add_user():
         name = form['userUserFirstName']
         lastName = form['userUserLastName']
         email = form['userUserEmail']
-        password = form['userUserPassword']
+        # password = form['userUserPassword'] # Generating password automatically
         #role = form['inputRole']
 
-        user = User(firstname=name, lastname=lastName, email=email, password=password, role=1) # to do: modify role
+        user = User(firstname=name, lastname=lastName, email=email, role=1) # to do: modify role
         AddUser(user)
         return redirect("/user/all")
 
@@ -174,7 +193,7 @@ def add_user():
         return render_template("public/user_form.html",
                                isIndex=True,
                                showID='none',
-                               showPassword='flex',
+                               showPassword='none',
                                userId="",
                                firstName="",
                                lastName="",
