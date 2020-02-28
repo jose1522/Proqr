@@ -1,6 +1,6 @@
 import requests
 from app.objects.Integration.DB.readKey import readDBKey
-
+from app.objects.newPassword import CreatePassword
 
 def AddUser(user):
     key = readDBKey()
@@ -11,7 +11,7 @@ def AddUser(user):
         'X-NAME': user.firstName,
         'X-LAST': user.lastName,
         'X-EMAIL': user.email,
-        'X-PASSWORD': user.password,
+        'X-PASSWORD': CreatePassword(),
         'X-ROLE': str(user.role),
 
         'Authorization': "Basic {0}".format(key)
