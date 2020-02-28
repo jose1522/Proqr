@@ -52,9 +52,9 @@
                 <div class="form-group col-md-12">
                     <label for="inputRole">Role</label>
                     <select id="inputRole" name="inputRole" class="form-control">
-                        <option {% if role=="Buyer" %} selected="selected"{% endif %}>Buyer</option>
-                        <option {% if role=="Chief Approver" %} selected="selected"{% endif %}>Chief Approver</option>
-                        <option{% if role=="Financial Approver" %} selected="selected"{% endif %}>Financial Approver</option>
+                        {% for roleItem in roleList %}
+                        <option {% if role==roleItem %} selected="selected"{% endif %}>{{roleItem}}</option>    
+                        {% endfor %}
                     </select>
                 </div>
             </div>
