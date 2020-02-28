@@ -4,6 +4,8 @@ from flask import request as req
 from app.objects.Integration.DB.login import UserLogin
 from app.objects.Integration.DB.userData import FetchUserData
 from app.objects.Integration.DB.modifyUser import ModifyUser
+from app.objects.Integration.DB.deleteUser import DeleteUser
+from app.objects.Integration.DB.addUser import AddUser
 from app.objects.user import User
 from app.objects.Integration.DB.userList import UserList
 
@@ -67,17 +69,17 @@ def reporting():
     return render_template("public/home.html")
 
 
-@app.route("/user/new")
-def new_user():
-    return render_template("public/user_form.html",
-                           isIndex=True,
-                           showID = 'none',
-                           showPassword='flex', # Shows the password field
-                           userId="",
-                           firstName="",
-                           lastName="",
-                           email="",
-                           password="")
+# @app.route("/user/new")
+# def new_user():
+#     return render_template("public/user_form.html",
+#                            isIndex=True,
+#                            showID = 'none',
+#                            showPassword='flex', # Shows the password field
+#                            userId="",
+#                            firstName="",
+#                            lastName="",
+#                            email="",
+#                            password="")
 
 
 @app.route("/user/<id>") # Dynamic URL that shows a form for any user id
@@ -130,14 +132,51 @@ def edit_user():
                                password="")
 
 
-@app.route("/user/delete")
+@app.route("/user/delete", methods=['GET','POST'])
 def delete_user():
-    return render_template("public/user_form.html",
-                           isIndex=False,
-                           showID='flex',
-                           showPassword='none',
-                           userId="",
-                           firstName="",
-                           lastName="",
-                           email="",
-                           password="")
+    if req.method == 'POST':
+        form = req.form
+        id = form['userUserID']
+
+        if id:
+            user = User(userid=id)
+            DeleteUser(user)
+            return redirect("/user/all".format(id))
+        else:
+            return redirect(url_for('home'))
+
+    else:
+        return render_template("public/user_form.html",
+                               isIndex=False,
+                               showID='flex',
+                               showPassword='none',
+                               userId="",
+                               firstName="",
+                               lastName="",
+                               email="",
+                               password="")
+
+@app.route("/user/add", methods=['GET','POST'])
+def add_user():
+    if req.method == 'POST':
+        form = req.form
+        name = form['userUserFirstName']
+        lastName = form['userUserLastName']
+        email = form['userUserEmail']
+        password = form['userUserPassword']
+        #role = form['inputRole']
+
+        user = User(firstname=name, lastname=lastName, email=email, password=password, role=1) # to do: modify role
+        AddUser(user)
+        return redirect("/user/all")
+
+    else:
+        return render_template("public/user_form.html",
+                               isIndex=True,
+                               showID='none',
+                               showPassword='flex',
+                               userId="",
+                               firstName="",
+                               lastName="",
+                               email="",
+                               password="")
