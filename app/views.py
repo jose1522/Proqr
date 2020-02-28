@@ -8,6 +8,8 @@ from app.objects.Integration.DB.deleteUser import DeleteUser
 from app.objects.Integration.DB.addUser import AddUser
 from app.objects.Integration.DB.recoverPassword import RecoverPassword
 from app.objects.user import User
+from app.objects.role import roleNumberToString
+from app.objects.role import roleStringToNumber
 from app.objects.Integration.DB.userList import UserList
 
 @app.route("/", methods=['GET', 'POST'])
@@ -131,10 +133,11 @@ def edit_user():
         name = form['userUserFirstName']
         lastName = form['userUserLastName']
         email = form['userUserEmail']
-        role = form['userUserPassword']
+        role = 2
 
         if id:
-            user = User(userid=id, firstname=name, lastname=lastName, email=email, role=1) # to do: modify role
+            user = User(userid=id, firstname=name, lastname=lastName, email=email, role=roleNumberToString(role)) # to do: modify role
+            print(user.role)
             ModifyUser(user)
             return redirect("/user/{0}".format(id))
         else:
@@ -182,11 +185,14 @@ def add_user():
         name = form['userUserFirstName']
         lastName = form['userUserLastName']
         email = form['userUserEmail']
+        role = 'Buyer'
+        
         # password = form['userUserPassword'] # Generating password automatically
         #role = form['inputRole']
-
         user = User(firstname=name, lastname=lastName, email=email, role=1) # to do: modify role
+        print(user.role)
         AddUser(user)
+  
         return redirect("/user/all")
 
     else:
