@@ -3,6 +3,7 @@ from app.objects.sendGrid import SendEmail
 from app.objects.Integration.DB.readKey import readDBKey
 from app.objects.newPassword import CreatePassword
 
+#Metodo para agregar el contenido a la base de datos (Usarios con sus parametros)
 def AddUser(user):
     key = readDBKey()
 
@@ -19,6 +20,7 @@ def AddUser(user):
     }
 
     response = requests.request("POST", url, headers=headers)
+    #Envio del password al usuario atraves de correo electornico
     body = 'Your PROQR password is {0}'.format(password)
     SendEmail(sender='noreply@email.com', to=user.email, subject='Welcome to PROQR',body=body)
     return response.status_code
