@@ -10,6 +10,7 @@ from app.objects.Integration.DB.recoverPassword import RecoverPassword
 from app.objects.user import User
 from app.objects.role import roleNumberToString
 from app.objects.role import roleStringToNumber
+from app.objects.role import getRoles
 from app.objects.Integration.DB.userList import UserList
 
 @app.route("/", methods=['GET', 'POST'])
@@ -33,7 +34,8 @@ def recover_password():
     r = req
     if 'userUserID' in form:
         id = form['userUserID']
-        u = User(userid=id)
+        email = form['userUserEmail']
+        u = User(userid=id, email=email)
         RecoverPassword(u)
     elif 'recoveryEmail' in form:
         email = form['recoveryEmail']
@@ -115,7 +117,8 @@ def user_info(id):
                            lastName=user.lastName,
                            email=user.email,
                            password=user.password,
-                           role=roleNumberToString(user.role))
+                           role=roleNumberToString(user.role),
+                           roleList=getRoles())
 
 
 @app.route("/user/all")
@@ -204,4 +207,5 @@ def add_user():
                                firstName="",
                                lastName="",
                                email="",
-                               password="")
+                               password="",
+                               roleList=getRoles())
