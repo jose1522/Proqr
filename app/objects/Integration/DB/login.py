@@ -3,7 +3,7 @@ import json
 from app.objects.Integration.DB.readKey import readDBKey
 import hashlib
 
-
+#Se encarga dela validacion de los datos en la ventana de autenticacion contra los datos almacenados en la base de datos
 class UserLogin:
 
     def __init__(self, password=None, email=None):
@@ -24,6 +24,7 @@ class UserLogin:
         url = "https://jskr4ovkybl0gsf-db202002091757.adb.us-ashburn-1.oraclecloudapps.com/ords/tables/api/authenticate"
 
         headers = {
+            #Aqui se realiza la comparativa de los datos recibidos de la ventana de log in
             'X-Password': self.__password,
             'X-Email': self.__email,
             'Authorization': "Basic {0}".format(key)

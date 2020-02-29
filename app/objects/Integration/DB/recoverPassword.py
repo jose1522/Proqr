@@ -3,7 +3,7 @@ from app.objects.sendGrid import SendEmail
 from app.objects.Integration.DB.readKey import readDBKey
 from app.objects.newPassword import CreatePassword
 import json
-
+#Metodo para recuperar contrasena de los usuarios
 def RecoverPassword(user):
     key = readDBKey()
 
@@ -11,6 +11,7 @@ def RecoverPassword(user):
     headers = {
         'Authorization': "Basic {0}".format(key)
     }
+    #Se recibe el password como una variable
     password = CreatePassword()
     if user.userId != "":
         headers.update({"X-ID":user.userId})
@@ -19,7 +20,7 @@ def RecoverPassword(user):
     elif user.email != "":
         headers.update({"X-Email": user.email})
         headers.update({"X-Password": password})
-
+    #Aqui se procede enviar el email con la contrasena autogenerada
     body = 'Your new PROQR password is {0}'.format(password)
     response = requests.request("PUT", url, headers=headers)
     responseBody = json.loads(response.content)
