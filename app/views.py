@@ -13,11 +13,12 @@ from app.objects.role import roleStringToNumber
 from app.objects.role import getRoles
 from app.objects.Integration.DB.userList import UserList
 
+# Endpoint para visualizar la pagina del login.
 @app.route("/", methods=['GET', 'POST'])
 def index():
     if req.method == 'GET':
         return render_template("public/index.html")
-    else:
+    else: # Instrucciones para metodo post
         email = req.form['inputEmail']
         password = req.form['inputPassword']
         login = UserLogin(password,email)
@@ -27,17 +28,17 @@ def index():
         else:
             return redirect(url_for('index'))
 
-
+# Endpoint para recuperar contrasenna
 @app.route("/recover_password", methods=['POST'])
 def recover_password():
     form = req.form
     r = req
-    if 'userUserID' in form:
+    if 'userUserID' in form: # Seccion para cuando se recibe desde editar usuario
         id = form['userUserID']
         email = form['userUserEmail']
         u = User(userid=id, email=email)
         RecoverPassword(u)
-    elif 'recoveryEmail' in form:
+    elif 'recoveryEmail' in form: # Seccion para cuando se recibe desde recuperar contrasenna
         email = form['recoveryEmail']
         u = User(email=email)
         RecoverPassword(u)
@@ -47,46 +48,47 @@ def recover_password():
     return redirect(url)
 
 
+# Endpoint para finalizar sesion
 @app.route("/logout")
 def logout():
     return render_template("public/index.html")
 
-
+# Endpoint para el landing page
 @app.route("/home")
 def home():
     return render_template("public/home.html")
 
-
+# Endpoing para generar un nuevo purchase request
 @app.route("/purchase_order/new")
 def newPurchaseOrder():
     return render_template("public/purchase_form.html", isIndex=True)
 
-
+# Endpoint para modigicar un purchase request
 @app.route("/purchase_order/modify")
 def modifyPurchaseOrder():
     return render_template("public/purchase_form.html", isIndex=False)
 
-
+# Endpoint para visualizar purchase orders
 @app.route("/purchase_order")
 def purchaseOrder():
     return render_template("public/purchase_form.html")
 
-
+# Endpoint para visualizar requests
 @app.route("/requests")
 def request():
     return render_template("public/home.html")
 
-
+# Endpoint para ver el profile
 @app.route("/profile")
 def profile():
     return render_template("public/home.html")
 
-
+# Endpoint para acceder a pagina de admin
 @app.route("/admin")
 def admin():
     return render_template("public/home.html")
 
-
+# Endpoint para acceder a reportes
 @app.route("/reporting")
 def reporting():
     return render_template("public/home.html")
@@ -120,7 +122,7 @@ def user_info(id):
                            role=roleNumberToString(user.role),
                            roleList=getRoles())
 
-
+# Endpoint para visualizar todos los usuarios
 @app.route("/user/all")
 def user_list():
     uList = UserList()
@@ -128,7 +130,7 @@ def user_list():
 
     return render_template("public/user_table.html", users=uList.users)
 
-
+# Endpoint para modificar un usuario
 @app.route("/user/modify", methods=['GET','POST'])
 def edit_user():
     if req.method == 'POST':
@@ -146,7 +148,7 @@ def edit_user():
             return redirect("/user/{0}".format(id))
         else:
             return redirect(url_for('home'))
-    else:
+    else: # Seccion que muestra un formulario vacio
         return render_template("public/user_form.html",
                                isIndex=False,
                                showID='flex',
@@ -157,7 +159,7 @@ def edit_user():
                                email="",
                                password="")
 
-
+# Endpoint para eliminar un usuario
 @app.route("/user/delete", methods=['GET','POST'])
 def delete_user():
     if req.method == 'POST':
@@ -182,6 +184,7 @@ def delete_user():
                                email="",
                                password="")
 
+# Endpoint para agregar un usuario
 @app.route("/user/add", methods=['GET','POST'])
 def add_user():
     if req.method == 'POST':
