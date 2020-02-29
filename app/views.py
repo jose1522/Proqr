@@ -34,7 +34,8 @@ def recover_password():
     r = req
     if 'userUserID' in form:
         id = form['userUserID']
-        u = User(userid=id)
+        email = form['userUserEmail']
+        u = User(userid=id, email=email)
         RecoverPassword(u)
     elif 'recoveryEmail' in form:
         email = form['recoveryEmail']

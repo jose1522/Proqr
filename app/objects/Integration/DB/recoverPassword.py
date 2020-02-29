@@ -14,11 +14,14 @@ def RecoverPassword(user):
     if user.userId != "":
         headers.update({"X-ID":user.userId})
         headers.update({"X-Password": password})
+
     elif user.email != "":
         headers.update({"X-Email": user.email})
         headers.update({"X-Password": password})
 
-    SendEmail(sender='noreply@email.com', to= user.email,subject='Your New Password', body= password)
+    body = 'Your new PROQR password is {0}'.format(password)
+    SendEmail(sender='noreply@email.com', to=user.email, subject='PROQR Password Recovery', body=body)
+
     response = requests.request("PUT", url, headers=headers)
     return response.status_code
 
