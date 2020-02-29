@@ -2,6 +2,7 @@ import requests
 from app.objects.sendGrid import SendEmail
 from app.objects.Integration.DB.readKey import readDBKey
 from app.objects.newPassword import CreatePassword
+import json
 
 def RecoverPassword(user):
     key = readDBKey()
@@ -20,9 +21,10 @@ def RecoverPassword(user):
         headers.update({"X-Password": password})
 
     body = 'Your new PROQR password is {0}'.format(password)
-    SendEmail(sender='noreply@email.com', to=user.email, subject='PROQR Password Recovery', body=body)
-
     response = requests.request("PUT", url, headers=headers)
+    responseBody = json.loads(response.content)
+    if responseBody['X-Status'] == 200:
+        SendEmail(sender='noreply@email.com', to=user.email, subject='PROQR Password Recovery', body=body)
     return response.status_code
 
 
