@@ -19,5 +19,6 @@ def AddUser(user):
     }
 
     response = requests.request("POST", url, headers=headers)
-    SendEmail(sender='noreply@email.com', to=user.email, subject='Your New Password',body=password)
+    body = 'Your PROQR password is {0}'.format(password)
+    SendEmail(sender='noreply@email.com', to=user.email, subject='Welcome to PROQR',body=body)
     return response.status_code

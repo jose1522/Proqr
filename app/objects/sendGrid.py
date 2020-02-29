@@ -10,8 +10,6 @@ def SendEmail(sender,to,subject,body):
         subject= subject,
         html_content='<p>{0}</p>'.format(body)
     )
-    sg = SendGridAPIClient(
-        key
-    )
+    sg = SendGridAPIClient(key)
     response = sg.send(message)
     return response
