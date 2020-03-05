@@ -1,5 +1,7 @@
 from app import app
 from flask import render_template, url_for, session, jsonify, make_response, g, redirect, abort, flash
+from functools import wraps
+
 from flask import request as req
 from app.objects.Integration.DB.login import UserLogin
 from app.objects.Integration.DB.userData import FetchUserData
@@ -13,6 +15,17 @@ from app.objects.role import roleStringToNumber
 from app.objects.role import getRoles
 from app.objects.Integration.DB.userList import UserList
 
+
+#Este metodo fuerza al usuario a iniciar sesión
+def login_required(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if 'user' in session:
+            return f(*args, **kwargs)
+        else:
+            return redirect(url_for('index'))
+    return wrap
+
 # Endpoint para visualizar la pagina del login.
 @app.route("/", methods=['GET', 'POST'])
 def index():
@@ -24,6 +37,7 @@ def index():
         login = UserLogin(password,email)
         response = login.Authenticate()
         if response['Result'] == 'TRUE':
+            session['user'] = response['Id']
             return redirect(url_for('home'))
         else:
             return redirect(url_for('index'))
@@ -50,46 +64,56 @@ def recover_password():
 
 # Endpoint para finalizar sesion
 @app.route("/logout")
+@login_required
 def logout():
+    session.clear()
     return render_template("public/index.html")
 
 # Endpoint para el landing page
 @app.route("/home")
+@login_required
 def home():
     return render_template("public/home.html")
 
 # Endpoing para generar un nuevo purchase request
 @app.route("/purchase_order/new")
+@login_required
 def newPurchaseOrder():
     return render_template("public/purchase_form.html", isIndex=True)
 
 # Endpoint para modigicar un purchase request
 @app.route("/purchase_order/modify")
+@login_required
 def modifyPurchaseOrder():
     return render_template("public/purchase_form.html", isIndex=False)
 
 # Endpoint para visualizar purchase orders
 @app.route("/purchase_order")
+@login_required
 def purchaseOrder():
     return render_template("public/purchase_form.html")
 
 # Endpoint para visualizar requests
 @app.route("/requests")
+@login_required
 def request():
     return render_template("public/home.html")
 
 # Endpoint para ver el profile
 @app.route("/profile")
+@login_required
 def profile():
     return render_template("public/home.html")
 
 # Endpoint para acceder a pagina de admin
 @app.route("/admin")
+@login_required
 def admin():
     return render_template("public/home.html")
 
 # Endpoint para acceder a reportes
 @app.route("/reporting")
+@login_required
 def reporting():
     return render_template("public/home.html")
 
@@ -108,6 +132,7 @@ def reporting():
 
 
 @app.route("/user/<id>") # Dynamic URL that shows a form for any user id
+@login_required
 def user_info(id):
     user = FetchUserData(id)
     return render_template("public/user_form.html",
@@ -124,6 +149,7 @@ def user_info(id):
 
 # Endpoint para visualizar todos los usuarios
 @app.route("/user/all")
+@login_required
 def user_list():
     uList = UserList()
     uList.FetchUserList()
@@ -132,6 +158,7 @@ def user_list():
 
 # Endpoint para modificar un usuario
 @app.route("/user/modify", methods=['GET','POST'])
+@login_required
 def edit_user():
     if req.method == 'POST':
         form = req.form
@@ -161,6 +188,7 @@ def edit_user():
 
 # Endpoint para eliminar un usuario
 @app.route("/user/delete", methods=['GET','POST'])
+@login_required
 def delete_user():
     if req.method == 'POST':
         form = req.form
@@ -186,6 +214,7 @@ def delete_user():
 
 # Endpoint para agregar un usuario
 @app.route("/user/add", methods=['GET','POST'])
+@login_required
 def add_user():
     if req.method == 'POST':
         form = req.form
