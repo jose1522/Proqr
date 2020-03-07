@@ -13,3 +13,4 @@ class User:
         self.role = role
         self.supervisor = supervisor
         self.userLink = "/user/{0}".format(self.userId)
+
