@@ -196,7 +196,7 @@ def delete_user():
 
         if id:
             user = User(userid=id, status=0)
-            ModifyUser(user)
+            DeleteUser(user)
             return redirect("/user/all".format(id))
         else:
             return redirect(url_for('home'))
