@@ -5,7 +5,7 @@ import string
 #la que se utiliza cuando al usuario se le ovlidad o cuando se crea un
 #nuevo usuario
 
-def CreatePassword():
+def CreatePassword(len=20):
     alphabet = string.ascii_letters + string.digits
-    password = ''.join(secrets.choice(alphabet) for i in range(20))
+    password = ''.join(secrets.choice(alphabet) for i in range(len))
     return password
