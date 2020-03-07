@@ -198,7 +198,7 @@ def delete_user():
         id = form['userUserID']
 
         if id:
-            user = User(userid=id)
+            user = User(userid=id, status=0)
             DeleteUser(user)
             return redirect("/user/all".format(id))
         else:
