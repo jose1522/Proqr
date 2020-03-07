@@ -30,7 +30,10 @@ def login_required(f):
 @app.route("/", methods=['GET', 'POST'])
 def index():
     if req.method == 'GET':
-        return render_template("public/index.html")
+        if 'user' in session:
+            return redirect(url_for('home'))
+        else:
+            return render_template("public/index.html")
     else: # Instrucciones para metodo post
         email = req.form['inputEmail']
         password = req.form['inputPassword']
