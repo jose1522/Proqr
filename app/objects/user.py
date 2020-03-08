@@ -3,8 +3,8 @@
 #Si algún valor no se agrega el se encarga de ponerlo vacío
 
 class User:
-
-    def __init__(self, userid="", firstname="", lastname="", email="", password="", role="", supervisor=""):
+#Aqui se define los atributos de los users
+    def __init__(self, userid="", firstname="", lastname="", email="", password="", role="", supervisor="", status=""):
         self.userId = userid
         self.firstName = firstname
         self.lastName = lastname
@@ -12,4 +12,6 @@ class User:
         self.password = password
         self.role = role
         self.supervisor = supervisor
+        self.status = status
         self.userLink = "/user/{0}".format(self.userId)
+
