@@ -14,3 +14,4 @@ class User:
         self.supervisor = supervisor
         self.status = status
         self.userLink = "/user/{0}".format(self.userId)
+
