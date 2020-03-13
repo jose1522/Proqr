@@ -14,6 +14,11 @@ from app.objects.role import roleNumberToString
 from app.objects.role import roleStringToNumber
 from app.objects.role import getRoles
 from app.objects.Integration.DB.userList import UserList
+from app.objects.purchaseRequest import PurchaseRequest
+from app.objects.Integration.DB.addRequest import AddRequest
+from app.objects.Integration.DB.modifyRequest import ModifyRequest
+from app.objects.Integration.DB.deleteRequest import DeleteRequest
+
 
 
 #Este metodo fuerza al usuario a iniciar sesión
@@ -78,17 +83,90 @@ def logout():
 def home():
     return render_template("public/home.html")
 
-# Endpoing para generar un nuevo purchase request
-@app.route("/purchase_order/new")
+# Endpoint para generar un nuevo purchase request
+@app.route("/purchase_request/new", methods=['GET','POST'])
 @login_required
-def newPurchaseOrder():
-    return render_template("public/purchase_form.html", isIndex=True)
+def newPurchaseRequest():
+    if req.method == 'POST':
+        form = req.form
+        userid = form['purchaseRequestUserID']
+        description = form['purchaseRequestDescription']
+        items = form['purchaseRequestItems']
+        comments = form['purchaseRequestComments']
+        amount = form['purchaseRequestAmount']
+        status = form['purchaseRequestStatus']
 
-# Endpoint para modigicar un purchase request
-@app.route("/purchase_order/modify")
+        purchaserequest = PurchaseRequest(userid=userid, description=description, items=items, comments=comments,
+                                          amount=amount, status=status)
+        AddRequest(purchaserequest)
+
+        return redirect("/purchase_request/all")
+
+    else: #Seccion que muestra un formulario vacio
+        return render_template("public/purchase_request_form.html",
+                               isIndex=True,
+                               userid='',
+                               description='',
+                               items='',
+                               comments='',
+                               amount='',
+                               status='')
+
+# Endpoint para modificar un purchase request
+@app.route("/purchase_request/modify", methods=['GET','POST'])
 @login_required
-def modifyPurchaseOrder():
-    return render_template("public/purchase_form.html", isIndex=False)
+def modifyPurchaseRequest():
+    if req.method == 'POST':
+        form = req.form
+        requestid = form['purchaseRequestUserID']
+        description = form['purchaseRequestDescription']
+        items = form['purchaseRequestItems']
+        comments = form['purchaseRequestComments']
+        amount = form['purchaseRequestAmount']
+        status = form['purchaseRequestStatus']
+
+        if requestid:
+            modifyPurchaseRequest = PurchaseRequest(requestid=requestid, description=description, items=items,
+                                              comments=comments, amount=amount, status=status)
+            ModifyRequest(modifyPurchaseRequest)
+            return redirect("/purchase_request/{0}".format(requestid))
+        else:
+            return redirect(url_for('home'))
+
+    else: #Seccion que muestra un formulario vacio
+        return render_template("public/purchase_request_form.html",
+                               isIndex=True,
+                               requestid='',
+                               description='',
+                               items='',
+                               comments='',
+                               amount='',
+                               status='')
+
+# Endpoint para eliminar un purchase request
+@app.route("/purchase_request/delete", methods=['GET','POST'])
+@login_required
+def deletePurchaseRequest():
+    if req.method == 'POST':
+        form = req.form
+        requestid = form['purchaseRequestUserID']
+
+        if requestid:
+            deletePurchaseRequest = PurchaseRequest(requestid=requestid, status=0)
+            DeleteRequest(deletePurchaseRequest)
+            return redirect("/purchase_request/all".format(requestid))
+        else:
+            return redirect(url_for('home'))
+
+    else: #Seccion que muestra un formulario vacio
+        return render_template("public/purchase_request_form.html",
+                               isIndex=True,
+                               requestid='',
+                               description='',
+                               items='',
+                               comments='',
+                               amount='',
+                               status='')
 
 # Endpoint para visualizar purchase orders
 @app.route("/purchase_order")
