@@ -18,6 +18,7 @@ from app.objects.purchaseRequest import PurchaseRequest
 from app.objects.Integration.DB.addRequest import AddRequest
 from app.objects.Integration.DB.modifyRequest import ModifyRequest
 from app.objects.Integration.DB.deleteRequest import DeleteRequest
+from app.objects.Integration.DB.requestList import RequestList
 
 
 
@@ -103,7 +104,7 @@ def newPurchaseRequest():
         return redirect("/purchase_request/all")
 
     else: #Seccion que muestra un formulario vacio
-        return render_template("public/purchase_request_form.html",
+        return render_template("public/purchase_form.html",
                                isIndex=True,
                                userid='',
                                description='',
@@ -236,6 +237,14 @@ def user_list():
     uList.FetchUserList()
 
     return render_template("public/user_table.html", users=uList.users)
+
+@app.route("/purchase/all")
+@login_required
+def purchase_list():
+    plist = RequestList()
+    plist.FetchPurchaseList()
+
+    return render_template("public/purchase_table.html", users=plist.purchases)
 
 # Endpoint para modificar un usuario
 @app.route("/user/modify", methods=['GET','POST'])
