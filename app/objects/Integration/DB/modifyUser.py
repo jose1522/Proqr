@@ -13,6 +13,8 @@ def ModifyUser(user):
         'X-LAST': user.lastName,
         'X-EMAIL': user.email,
         'X-ROLE': str(user.role),
+        'X-STATUS': user.status,
+
 
         'Authorization': "Basic {0}".format(key)
     }

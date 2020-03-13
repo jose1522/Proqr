@@ -7,7 +7,7 @@ from app.objects.newPassword import CreatePassword
 def AddUser(user):
     key = readDBKey()
 
-    url = "https://jskr4ovkybl0gsf-db202002091757.adb.us-ashburn-1.oraclecloudapps.com/ords/tables/api/users"
+    url = "https://jskr4ovkybl0gsf-db202002091757.adb.us-ashburn-1.addUser.pyoraclecloudapps.com/ords/tables/api/users"
     password = CreatePassword()
     headers = {
         'X-NAME': user.firstName,
