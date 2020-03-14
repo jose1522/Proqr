@@ -3,7 +3,7 @@
 <!-- Start of form row -->
             <div class="form-row" style="display:none;">
                 <div class="form-group col-md-12">
-                    <input class="form-control" type="text" id="formID" placeholder="This is the Primary Key" readonly>
+                    <input class="form-control" type="text" name="formID" placeholder="This is the Primary Key" readonly>
                 </div>
             </div>
             <!-- End of form row -->
@@ -12,7 +12,7 @@
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label for="purchaseUserName">User Name</label>
-                    <input class="form-control" type="text" id="formUserName" value="{{userid}}" readonly>
+                    <input class="form-control" type="text" name="purchaseUserName" value="{{userid}}" readonly>
                 </div>
             </div>
             <!-- End of form row -->
@@ -22,7 +22,7 @@
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label for="purchaseDescription">Description</label>
-                    <input type="text" class="form-control" id="inputDescription"
+                    <input type="text" class="form-control" name="purchaseDescription"
                         placeholder="Enter a brief description (required)">
                 </div>
             </div>
@@ -32,7 +32,7 @@
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label for="purchaseItems">Items</label>
-                <textarea class="form-control" id="inputItems" rows="3"
+                <textarea class="form-control" name="purchaseItems" rows="3"
                         placeholder="Enter the items you wish to request (required)"></textarea>
                 </div>
             </div>
@@ -42,7 +42,7 @@
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label for="purchaseComments">Comments</label>
-                <textarea class="form-control" id="inputComments" rows="3"
+                <textarea class="form-control" name="purchaseComments" rows="3"
                         placeholder="Enter any comments (optional)"></textarea>
                 </div>
             </div>
@@ -61,20 +61,16 @@
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label for="purchaseAmount">Amount</label>
-                    <input type="number" class="form-control" placeholder="Enter the total amount in USD" id="inputAmount">
+                    <input type="number" class="form-control" placeholder="Enter the total amount in USD" name="purchaseAmount">
                 </div>
             </div>
             <!-- End of form row -->
 
             <!-- Submit button -->
             {% if isIndex %}
-                <button type="button" class="btn btn-primary" formaction="/purchase_request/new">Order now</button>
+                <button type="submit" class="btn btn-primary" formaction="{{url_for('newPurchaseRequest')}}">Order now</button>
             {% else %}
-            <button type="button" class="btn btn-primary">Save</button>
-            <button type="button" class="btn btn-danger">Delete</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="submit" class="btn btn-danger">Delete</button>
             {% endif %}
-
-
-
-
 {%endblock%}
