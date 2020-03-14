@@ -12,26 +12,11 @@
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label for="purchaseUserName">User Name</label>
-                    <input class="form-control" type="text" id="formUserName" placeholder="This is your user name" readonly>
+                    <input class="form-control" type="text" id="formUserName" value="{{userid}}" readonly>
                 </div>
             </div>
             <!-- End of form row -->
 
-            <!-- Start of form row -->
-            <div class="form-row">
-                <div class="form-group col-md-12">
-                    <label for="inputExpenditureType">Expenditure Type</label>
-                    <select id="inputExpenditureType" class="form-control">
-                        <option selected>Choose...</option>
-                        <option>Option 1</option>
-                        <option>Option 2</option>
-                        <option>Option 3</option>
-                        <option>Option 4</option>
-                        <option>Option 5</option>
-                    </select>
-                </div>
-            </div>
-            <!-- End of form row -->
 
             <!-- Start of form row -->
             <div class="form-row">
@@ -83,7 +68,7 @@
 
             <!-- Submit button -->
             {% if isIndex %}
-                <button type="button" class="btn btn-primary">Order now</button>
+                <button type="button" class="btn btn-primary" formaction="/purchase_request/new">Order now</button>
             {% else %}
             <button type="button" class="btn btn-primary">Save</button>
             <button type="button" class="btn btn-danger">Delete</button>
