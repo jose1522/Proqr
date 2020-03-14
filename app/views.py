@@ -90,23 +90,22 @@ def home():
 def newPurchaseRequest():
     if req.method == 'POST':
         form = req.form
-        userid = form['purchaseRequestUserID']
-        description = form['purchaseRequestDescription']
-        items = form['purchaseRequestItems']
-        comments = form['purchaseRequestComments']
-        amount = form['purchaseRequestAmount']
-        status = form['purchaseRequestStatus']
+        userid = form['purchaseUserName']
+        description = form['purchaseDescription']
+        items = form['purchaseItems']
+        comments = form['purchaseComments']
+        amount = form['purchaseAmount']
 
         purchaserequest = PurchaseRequest(userid=userid, description=description, items=items, comments=comments,
-                                          amount=amount, status=status)
+                                          amount=amount)
         AddRequest(purchaserequest)
 
-        return redirect("/purchase_request/all")
+        return redirect("/purchase/all")
 
     else: #Seccion que muestra un formulario vacio
         return render_template("public/purchase_form.html",
                                isIndex=True,
-                               userid='',
+                               userid=session['user'],
                                description='',
                                items='',
                                comments='',
@@ -241,7 +240,8 @@ def user_list():
 @app.route("/purchase/all")
 @login_required
 def purchase_list():
-    plist = RequestList()
+    user = session['user']
+    plist = RequestList(user)
     plist.FetchPurchaseList()
 
     return render_template("public/purchase_table.html", users=plist.purchases)

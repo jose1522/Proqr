@@ -4,7 +4,7 @@
 
 class PurchaseRequest:
 #Aqui se define los atributos de los users
-    def __init__(self, userid="", requestid="",description="", items="", comments="", amount="", status=""):
+    def __init__(self, userid="", requestid="",description="", items="", comments="", amount="", status="", supervisor="", approver="", date=""):
         self.userid = userid
         self.requestid = requestid
         self.description = description
@@ -12,3 +12,6 @@ class PurchaseRequest:
         self.comments = comments
         self.amount = amount
         self.status = status
+        self.supervisor = supervisor
+        self.approver = approver
+        self.date = date

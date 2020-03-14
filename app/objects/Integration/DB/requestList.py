@@ -6,8 +6,9 @@ from app.objects.purchaseRequest import PurchaseRequest
 #Metodo que trae los datos de la base de datos de los usuarios ya registrados en la aplicacion.
 class RequestList:
 
-    def __init__(self):
+    def __init__(self, user = 0):
         self.purchases = []
+        self.user = user
 
     def FetchPurchaseList(self):
         key = readDBKey()
@@ -16,7 +17,8 @@ class RequestList:
         url = "https://jskr4ovkybl0gsf-db202002091757.adb.us-ashburn-1.oraclecloudapps.com/ords/tables/api/my_requests"
 
         headers = {
-            'Authorization': "Basic {0}".format(key)
+            'Authorization': "Basic {0}".format(key),
+            'X-ID': "{0}".format(self.user)
         }
 
 
@@ -27,11 +29,15 @@ class RequestList:
             items = response['items']
             for item in items:
                 purchaseid = item['id']
-                #description = item['description']
-                #items = item['items']
-                #comments = item['comments']
-                #amount = item['amount']
-                #purchase = PurchaseRequest(requestid=purchaseid, description=description, items=items,
-                #                           comments=comments, amount=amount)
-                purchase = PurchaseRequest(requestid=purchaseid)
+                description = item['description']
+                items = item['items']
+                comments = item['comments']
+                status = item['status']
+                amount = item['amount']
+                supervisor = item['supervisor']
+                approver = item['approver']
+                date = item['request_date']
+                purchase = PurchaseRequest(requestid=purchaseid, description=description, items=items,
+                                           comments=comments, amount=amount, status=status, supervisor=supervisor,
+                                           approver=approver, date=date)
                 self.purchases.append(purchase)
