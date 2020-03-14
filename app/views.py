@@ -98,7 +98,7 @@ def newPurchaseRequest():
 
         purchaserequest = PurchaseRequest(userid=userid, description=description, items=items, comments=comments,
                                           amount=amount)
-        AddRequest(purchaserequest)
+        AddRequest(purchaserequest, session['user'])
 
         return redirect("/purchase/all")
 
