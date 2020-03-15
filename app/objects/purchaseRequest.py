@@ -15,3 +15,4 @@ class PurchaseRequest:
         self.supervisor = supervisor
         self.approver = approver
         self.date = date
+        self.purchaseLink = "/purchase/{0}".format(self.requestid)
