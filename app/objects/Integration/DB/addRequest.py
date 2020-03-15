@@ -1,6 +1,7 @@
 import requests
 from app.objects.sendGrid import SendEmail
 from app.objects.Integration.DB.readKey import readDBKey
+import json
 
 #Metodo para agregar el contenido a la base de datos (Solicitudes con sus parametros)
 def AddRequest(purchaseRequest, user):
@@ -20,10 +21,11 @@ def AddRequest(purchaseRequest, user):
 
     response = requests.request("POST", url, headers=headers)
     #Envio de la confirmacion cuando el usuario hace un request atraves de correo electornico
-    if request.status_code == 200:
+    if response.status_code == 200:
+
         serverOutput = json.loads(response.text)
         supervisorEmail = serverOutput['X-SUPERVISOR']
-        requestID = serverOutput['X-REQUEST_ID']
+        requestID = serverOutput['X-RESQUEST_ID']
 
         body = """Your request has been placed succesfully!\n\n 
                 PROQR\n

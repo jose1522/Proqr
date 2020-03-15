@@ -29,6 +29,7 @@ class RequestList:
             items = response['items']
             for item in items:
                 purchaseid = item['id']
+                userid = item['employee']
                 description = item['description']
                 items = item['items']
                 comments = item['comments']
@@ -37,7 +38,7 @@ class RequestList:
                 supervisor = item['supervisor']
                 approver = item['approver']
                 date = item['request_date']
-                purchase = PurchaseRequest(requestid=purchaseid, description=description, items=items,
+                purchase = PurchaseRequest(requestid=purchaseid, userid=userid, description=description, items=items,
                                            comments=comments, amount=amount, status=status, supervisor=supervisor,
                                            approver=approver, date=date)
                 self.purchases.append(purchase)
