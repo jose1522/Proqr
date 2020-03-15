@@ -19,7 +19,9 @@ def FetchPurchaseData(id=0):
 
     if response['count'] > 0:
         response = response['items']
+        response = response[0]
         purchaseid = response['id']
+        userid = response['employee']
         description = response['description']
         items = response['items']
         comments = response['comments']
@@ -28,7 +30,7 @@ def FetchPurchaseData(id=0):
         supervisor = response['supervisor']
         approver = response['approver']
         date = response['request_date']
-        purchase = PurchaseRequest(requestid=purchaseid, description=description, items=items,
+        purchase = PurchaseRequest(requestid=purchaseid, userid=userid ,description=description, items=items,
                                    comments=comments, amount=amount, status=status, supervisor=supervisor,
                                    approver=approver, date=date)
         return purchase

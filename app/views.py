@@ -237,12 +237,13 @@ def purchase_info(id):
     return render_template("public/purchase_form.html",
                            isIndex=False,
                            showID='flex',
-                           showPassword='none', # Hides password
-                           purchaseUserID=purchase.userid,
-                           purchaseDescription=purchase.description,
-                           purchaseItems=purchase.items,
-                           purchaseComments=purchase.comments,
-                           purchaseAmount=purchase.amount)
+                           requestID=purchase.requestid,
+                           userid=purchase.userid,
+                           description=purchase.description,
+                           items=purchase.items,
+                           comments=purchase.comments,
+                           amount=purchase.amount
+                           )
 
 
 # Endpoint para visualizar todos los usuarios
