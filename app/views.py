@@ -19,6 +19,7 @@ from app.objects.Integration.DB.addRequest import AddRequest
 from app.objects.Integration.DB.modifyRequest import ModifyRequest
 from app.objects.Integration.DB.deleteRequest import DeleteRequest
 from app.objects.Integration.DB.requestList import RequestList
+from app.objects.Integration.DB.requestData import FetchPurchaseData
 
 
 
@@ -90,7 +91,7 @@ def home():
 def newPurchaseRequest():
     if req.method == 'POST':
         form = req.form
-        userid = form['purchaseUserName']
+        userid = form['purchaseUserID']
         description = form['purchaseDescription']
         items = form['purchaseItems']
         comments = form['purchaseComments']
@@ -98,7 +99,8 @@ def newPurchaseRequest():
 
         purchaserequest = PurchaseRequest(userid=userid, description=description, items=items, comments=comments,
                                           amount=amount)
-        AddRequest(purchaserequest, session['user'])
+        user = FetchUserData(session['user'])
+        AddRequest(purchaserequest, user)
 
         return redirect("/purchase/all")
 
@@ -228,6 +230,21 @@ def user_info(id):
                            role=roleNumberToString(user.role),
                            roleList=getRoles())
 
+@app.route("/purchase/<id>") # Dynamic URL that shows a form for any user id
+@login_required
+def purchase_info(id):
+    purchase = FetchPurchaseData(id)
+    return render_template("public/purchase_form.html",
+                           isIndex=False,
+                           showID='flex',
+                           showPassword='none', # Hides password
+                           purchaseUserID=purchase.userid,
+                           purchaseDescription=purchase.description,
+                           purchaseItems=purchase.items,
+                           purchaseComments=purchase.comments,
+                           purchaseAmount=purchase.amount)
+
+
 # Endpoint para visualizar todos los usuarios
 @app.route("/user/all")
 @login_required
@@ -244,7 +261,7 @@ def purchase_list():
     plist = RequestList(user)
     plist.FetchPurchaseList()
 
-    return render_template("public/purchase_table.html", users=plist.purchases)
+    return render_template("public/purchase_table.html", purchases=plist.purchases)
 
 # Endpoint para modificar un usuario
 @app.route("/user/modify", methods=['GET','POST'])
