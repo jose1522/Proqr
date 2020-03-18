@@ -23,9 +23,8 @@
                      alt="Card image cap" style="height:200px">
                 <p class="card-text">Select an option from the list below.</p>
                 <div class="list-group list-group-flush">
-                    <a href="/purchase_order/new" class="list-group-item list-group-item-action">Submit a new request</a>
-                    <a href="/purchase_order/modify" class="list-group-item list-group-item-action">Edit/Delete a request</a>
-                    <a href="#" class="list-group-item list-group-item-action">View my requests</a>
+                    <a href="{{ url_for('newPurchaseRequest')}}" class="list-group-item list-group-item-action">Submit a new request</a>
+                    <a href="{{ url_for('purchase_list')}}" class="list-group-item list-group-item-action">Edit/Delete a request</a>
                 </div>
             </div>
         </div>
@@ -42,8 +41,8 @@
                      alt="Card image cap" style="height:200px">
                 <p class="card-text">Select an option from the list below.</p>
                 <div class="list-group list-group-flush">
-                    <a href="#" class="list-group-item list-group-item-action">View open purchase orders</a>
-                    <a href="#" class="list-group-item list-group-item-action">View closed purchase orders</a>
+                    <a href="/purchase/all/open" class="list-group-item list-group-item-action">View open purchase orders</a>
+                    <a href="/purchase/all/closed" class="list-group-item list-group-item-action">View resolved purchase orders</a>
                 </div>
             </div>
         </div>
