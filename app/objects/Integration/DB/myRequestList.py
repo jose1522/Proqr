@@ -4,7 +4,7 @@ from app.objects.Integration.DB.readKey import readDBKey
 from app.objects.purchaseRequest import PurchaseRequest
 
 #Metodo que trae los datos de la base de datos de los usuarios ya registrados en la aplicacion.
-class RequestList:
+class MyRequestList:
 
     def __init__(self, user = 0):
         self.purchases = []
