@@ -4,7 +4,7 @@ from app.objects.Integration.DB.readKey import readDBKey
 import json
 
 #Metodo para agregar el contenido a la base de datos (Solicitudes con sus parametros)
-def AddRequest(purchaseRequest, user):
+def AddRequest(purchaseRequest, userEmail):
     key = readDBKey()
 
     url = "https://jskr4ovkybl0gsf-db202002091757.adb.us-ashburn-1.oraclecloudapps.com/ords/tables/api/request"
@@ -30,7 +30,7 @@ def AddRequest(purchaseRequest, user):
         body = """Your request has been placed succesfully!\n\n 
                 PROQR\n
                 This e-mail message has been delivered from a send-only address. Please do not reply to this message.""".format(requestID)
-        SendEmail(sender='noreply@email.com', to=user.email, subject='Purchase Request {0} Confirmation'.format(requestID),body=body)
+        SendEmail(sender='noreply@email.com', to=userEmail, subject='Purchase Request {0} Confirmation'.format(requestID), body=body)
 
 
         body = """A new request has been submitted for approval: {0}\n\n 
