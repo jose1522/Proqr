@@ -5,7 +5,7 @@ from app.objects.Integration.DB.readKey import readDBKey
 def DeleteRequest(purchaseRequest):
     key = readDBKey()
 
-    url = "https://jskr4ovkybl0gsf-db202002091757.adb.us-ashburn-1.oraclecloudapps.com/ords/tables/api/users"
+    url = "https://jskr4ovkybl0gsf-db202002091757.adb.us-ashburn-1.oraclecloudapps.com/ords/tables/api/request"
 
     headers = {
         #Recibe el ID del request que va ser borrado

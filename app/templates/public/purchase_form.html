@@ -1,9 +1,10 @@
 {% extends "public/base_form.html" %}
 {% block form%}
 <!-- Start of form row -->
-            <div class="form-row" style="display:none;">
+            <div class="form-row" style="display:{{showID}};">
                 <div class="form-group col-md-12">
-                    <input class="form-control" type="text" name="formID" placeholder="This is the Primary Key" readonly>
+                    <label for="formID">Request ID</label>
+                    <input class="form-control" type="text" name="formID" placeholder="This is the Primary Key" value="{{requestID}}" readonly>
                 </div>
             </div>
             <!-- End of form row -->
@@ -11,8 +12,8 @@
             <!-- Start of form row -->
             <div class="form-row">
                 <div class="form-group col-md-12">
-                    <label for="purchaseUserID">User ID</label>
-                    <input class="form-control" type="text" name="purchaseUserName" value="{{userid}}" readonly>
+                    <label for="purchaseUserName">User ID</label>
+                    <input class="form-control" type="text" name="purchaseUserID" value="{{userid}}" readonly>
                 </div>
             </div>
             <!-- End of form row -->
@@ -23,7 +24,8 @@
                 <div class="form-group col-md-12">
                     <label for="purchaseDescription">Description</label>
                     <input type="text" class="form-control" name="purchaseDescription"
-                        placeholder="Enter a brief description (required)">
+                        placeholder="Enter a brief description (required)" value="{{description}}"
+                        {% if descriptionReadOnly=='True' %} readonly {% endif %}>
                 </div>
             </div>
             <!-- End of form row -->
@@ -33,7 +35,9 @@
                 <div class="form-group col-md-12">
                     <label for="purchaseItems">Items</label>
                 <textarea class="form-control" name="purchaseItems" rows="3"
-                        placeholder="Enter the items you wish to request (required)"></textarea>
+                        placeholder="Enter the items you wish to request (required)" 
+                        {% if itemsReadOnly=='True' %} readonly {% endif %}
+                        >{{items}}</textarea>
                 </div>
             </div>
             <!-- End of form row -->
@@ -43,7 +47,7 @@
                 <div class="form-group col-md-12">
                     <label for="purchaseComments">Comments</label>
                 <textarea class="form-control" name="purchaseComments" rows="3"
-                        placeholder="Enter any comments (optional)"></textarea>
+                        placeholder="Enter any comments (optional)">{{comments}}</textarea>
                 </div>
             </div>
             <!-- End of form row -->
@@ -61,7 +65,19 @@
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label for="purchaseAmount">Amount</label>
-                    <input type="number" class="form-control" placeholder="Enter the total amount in USD" name="purchaseAmount">
+                    <input type="number" class="form-control" placeholder="Enter the total amount in USD" name="purchaseAmount" value="{{amount}}"
+                    {% if amountReadOnly=='True' %} readonly {% endif %}
+                    >
+                </div>
+            </div>
+            <!-- End of form row -->
+
+            
+            <!-- Start of form row -->
+            <div class="form-row" style="display:{{showStatus}};">
+                <div class="form-group col-md-12">
+                    <label for="formID">Request Status</label>
+                    <input class="form-control" type="text" name="status" value="{{status}}" readonly>
                 </div>
             </div>
             <!-- End of form row -->
@@ -70,7 +86,11 @@
             {% if isIndex %}
                 <button type="submit" class="btn btn-primary" formaction="{{url_for('newPurchaseRequest')}}">Order now</button>
             {% else %}
-                <button type="submit" class="btn btn-primary">Save</button>
-                <button type="submit" class="btn btn-danger">Delete</button>
+                <button type="submit" class="btn btn-primary" formaction="{{url_for('modifyPurchaseRequest')}}" >Save</button>
+                <button type="submit" class="btn btn-danger" formaction="{{url_for('deletePurchaseRequest')}}">Delete</button>
             {% endif %}
+
+                <input type="submit"  name="approvedBtn" class="btn btn-success" formaction="{{url_for('modifyPurchaseRequest')}}" value="Approve">
+                <input type="submit" name="rejectedBtn" class="btn btn-danger" formaction="{{url_for('modifyPurchaseRequest')}}"  value="Reject">
+
 {%endblock%}
