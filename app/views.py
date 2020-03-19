@@ -26,6 +26,7 @@ from app.objects.Integration.DB.deleteRequest import DeleteRequest
 from app.objects.Integration.DB.myRequestList import MyRequestList
 from app.objects.Integration.DB.RequestList import RequestList
 from app.objects.Integration.DB.requestData import FetchPurchaseData
+from app.objects.Integration.DB.isAdmin import IsAdmin
 
 
 
@@ -91,7 +92,9 @@ def logout():
 @app.route("/home")
 @login_required
 def home():
-    return render_template("public/home.html")
+    return render_template("public/home.html",
+                           role=session['role'],
+                           isAdmin= IsAdmin(session['user']))
 
 # Endpoint para generar un nuevo purchase request
 @app.route("/purchase/new", methods=['GET','POST'])
@@ -114,6 +117,7 @@ def newPurchaseRequest():
     else: #Seccion que muestra un formulario vacio
         return render_template("public/purchase_form.html",
                                isIndex=True,
+                               role=session['role'],
                                showID="none",
                                showStatus="none",
                                userid=session['user'],
@@ -131,6 +135,7 @@ def purchase_info(id):
     return render_template("public/purchase_form.html",
                            isIndex=False,
                            showID='flex',
+                           role=session['role'],
                            descriptionReadOnly='True',
                            itemsReadOnly='True',
                            amountReadOnly='True',
