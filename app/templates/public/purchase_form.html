@@ -47,6 +47,7 @@
                 <div class="form-group col-md-12">
                     <label for="purchaseComments">Comments</label>
                 <textarea class="form-control" name="purchaseComments" rows="3"
+                          {% if isOpen==False %} readonly {% endif %}
                         placeholder="Enter any comments (optional)">{{comments}}</textarea>
                 </div>
             </div>
@@ -85,12 +86,14 @@
             <!-- Submit button -->
 
             {% if role not in ('1')%}
-                <input type="submit"  name="approvedBtn" class="btn btn-success" formaction="{{url_for('modifyPurchaseRequest')}}" value="Approve">
-                <input type="submit" name="rejectedBtn" class="btn btn-danger" formaction="{{url_for('modifyPurchaseRequest')}}"  value="Reject">
+                {% if isOpen == True %}
+                    <input type="submit"  name="approvedBtn" class="btn btn-success" formaction="{{url_for('modifyPurchaseRequest')}}" value="Approve">
+                    <input type="submit" name="rejectedBtn" class="btn btn-danger" formaction="{{url_for('modifyPurchaseRequest')}}"  value="Reject">
+                {% endif %}
             {% else %}
                 {% if isIndex %}
                     <button type="submit" class="btn btn-primary" formaction="{{url_for('newPurchaseRequest')}}">Order now</button>
-                {% else %}
+                {% elif isOpen == True%}
                     <button type="submit" class="btn btn-primary" formaction="{{url_for('modifyPurchaseRequest')}}" >Save</button>
                     <button type="submit" class="btn btn-danger" formaction="{{url_for('deletePurchaseRequest')}}">Delete</button>
                 {% endif %}
