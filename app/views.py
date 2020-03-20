@@ -57,6 +57,7 @@ def index():
             session['user'] = response['Id']
             session['role'] = response['Role']
             session['email'] = email
+            session['name'] = response['Name']
             return redirect(url_for('home'))
         else:
             return redirect(url_for('index'))
@@ -94,7 +95,8 @@ def logout():
 def home():
     return render_template("public/home.html",
                            role=session['role'],
-                           isAdmin= IsAdmin(session['user']))
+                           isAdmin= IsAdmin(session['user']),
+                           name=session['name'])
 
 # Endpoint para generar un nuevo purchase request
 @app.route("/purchase/new", methods=['GET','POST'])
@@ -145,9 +147,12 @@ def purchase_info(id):
                            items=purchase.items,
                            comments=purchase.comments,
                            amount=purchase.amount,
-                           status=statusNumberToString(1),
-                           statusList=getStatus()
+                           status=statusNumberToString(purchase.status),
+                           statusList=getStatus(),
+                           isOpen=purchase.isOpen(int(session['role'])),
+                           statusid=purchase.status,
                            )
+
 
 
 @app.route("/purchase/all")
@@ -157,7 +162,7 @@ def purchase_list():
     plist = MyRequestList(user)
     plist.FetchPurchaseList()
 
-    return render_template("public/purchase_table.html", purchases=plist.purchases)
+    return render_template("public/purchase_table.html", purchases=plist.purchases,sessionrole=int(session['role']))
 
 @app.route("/purchase/all/<status>")
 @login_required
@@ -169,7 +174,7 @@ def filtered_purchase_list(status):
         plist = RequestList(userRole=role,userID=user,action=status)
         plist.FetchPurchaseList()
 
-        return render_template("public/purchase_table.html", purchases=plist.purchases)
+        return render_template("public/purchase_table.html", purchases=plist.purchases, sessionrole=int(session['role']))
     else:
         return redirect(url_for('index'))
 
