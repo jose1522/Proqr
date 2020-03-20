@@ -48,7 +48,11 @@
               <h6 class="card-subtitle mb-2">{{ purchase.date }}</h6>
               <p class="card-text text-muted">{{ purchase.items }}</p>
               <p class="card-text text-muted">{{ purchase.amount }}</p>
-              <a href="{{ purchase.purchaseLink }}" class="btn btn-primary">Edit/Delete</a>
+              {% if purchase.isOpen(sessionrole) == False %}
+                <a href="{{ purchase.purchaseLink }}" class="btn btn-primary">View</a>
+              {% else %}
+                <a href="{{ purchase.purchaseLink }}" class="btn btn-primary">Edit/Delete</a>
+              {% endif %}
             </div>
         </div>
         {% endfor %}

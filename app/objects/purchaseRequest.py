@@ -27,3 +27,9 @@ class PurchaseRequest:
         except:
             return  None
 
+
+    def isOpen(self,role):
+        if role > self.status or self.status == 1:
+            return True
+        else:
+            return False
