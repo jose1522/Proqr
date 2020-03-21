@@ -21,8 +21,8 @@ def AddRequest(purchaseRequest, userEmail):
     headers = {
         'X-ID': NulltoNA(purchaseRequest.userid),
         'X-DESCRIPTION': NulltoNA(purchaseRequest.description),
-        'X-ITEMS': NulltoNA(purchaseRequest.items),
-        'X-COMMENTS': NulltoNA(purchaseRequest.comments),
+        'X-ITEMS': json.dumps(NulltoNA(purchaseRequest.items)),
+        'X-COMMENTS': json.dumps(NulltoNA(purchaseRequest.comments)),
         'X-AMOUNT': NulltoNA(purchaseRequest.amount),
 
         'Authorization': "Basic {0}".format(key)

@@ -14,7 +14,7 @@ def ModifyRequest(purchaseRequest, userEmail):
 
     headers = {
         'X-ID': purchaseRequest.requestid,
-        'X-COMMENTS': purchaseRequest.comments,
+        'X-COMMENTS': json.dumps(purchaseRequest.comments),
         'X-STATUS': purchaseRequest.status,
 
         'Authorization': "Basic {0}".format(key)
