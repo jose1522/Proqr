@@ -111,7 +111,7 @@ def newPurchaseRequest():
         amount = form['purchaseAmount']
 
         purchaserequest = PurchaseRequest(userid=userid, description=description, items=items, comments=comments,
-                                          amount=amount)
+                                          amount=amount, status = "1")
         AddRequest(purchaserequest, session['email'])
 
         return redirect(url_for('purchase_list'))
