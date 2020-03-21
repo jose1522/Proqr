@@ -44,9 +44,9 @@
         {% for purchase in purchases %}
         <div class="card bg-light text-center m-2" style="min-width: 240px; border-radius: 1em;">
             <div class="card-body">
-              <h5 class="card-title">{{ purchase.description }}</h5>
+              <h5 class="card-title">{{ purchase.requestid }}</h5>
               <h6 class="card-subtitle mb-2">{{ purchase.date }}</h6>
-              <p class="card-text text-muted">{{ purchase.items }}</p>
+              <p class="card-text text-muted">{{ purchase.description }}</p>
               <p class="card-text text-muted">{{ purchase.amount }}</p>
               {% if purchase.isOpen(sessionrole) == False %}
                 <a href="{{ purchase.purchaseLink }}" class="btn btn-primary">View</a>
