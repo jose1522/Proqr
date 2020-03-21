@@ -1,7 +1,14 @@
 import requests
+from app.objects.Integration.DB.notification import RequestNotification
 from app.objects.sendGrid import SendEmail
 from app.objects.Integration.DB.readKey import readDBKey
 import json
+
+def NulltoNA(input):
+    if input is None or input == '':
+        return "NA"
+    else:
+        return input
 
 #Metodo para agregar el contenido a la base de datos (Solicitudes con sus parametros)
 #Método que agrega un request
@@ -12,11 +19,11 @@ def AddRequest(purchaseRequest, userEmail):
     url = "https://jskr4ovkybl0gsf-db202002091757.adb.us-ashburn-1.oraclecloudapps.com/ords/tables/api/request"
 
     headers = {
-        'X-ID': purchaseRequest.userid,
-        'X-DESCRIPTION': purchaseRequest.description,
-        'X-ITEMS': purchaseRequest.items,
-        'X-COMMENTS': purchaseRequest.comments,
-        'X-AMOUNT': purchaseRequest.amount,
+        'X-ID': NulltoNA(purchaseRequest.userid),
+        'X-DESCRIPTION': NulltoNA(purchaseRequest.description),
+        'X-ITEMS': json.dumps(NulltoNA(purchaseRequest.items)),
+        'X-COMMENTS': json.dumps(NulltoNA(purchaseRequest.comments)),
+        'X-AMOUNT': NulltoNA(purchaseRequest.amount),
 
         'Authorization': "Basic {0}".format(key)
     }
@@ -26,20 +33,8 @@ def AddRequest(purchaseRequest, userEmail):
     if response.status_code == 200:
 
         serverOutput = json.loads(response.text)
-        supervisorEmail = serverOutput['X-SUPERVISOR']
-        requestID = serverOutput['X-RESQUEST_ID']
 
-        body = """Your request has been placed succesfully!\n\n 
-                PROQR\n
-                This e-mail message has been delivered from a send-only address. Please do not reply to this message.""".format(requestID)
-        SendEmail(sender='noreply@email.com', to=userEmail, subject='Purchase Request {0} Confirmation'.format(requestID), body=body)
-
-
-        body = """A new request has been submitted for approval: {0}\n\n 
-                  'PROQR\n'
-                  This e-mail message has been delivered from a send-only address. Please do not reply to this message.
-                """.format(requestID)
-
-        SendEmail(sender='noreply@email.com', to=supervisorEmail, subject='Purchase Request Confirmation',body=body)
+        RequestNotification(purchaseRequest,userEmail, serverOutput)
 
     return response.status_code
+

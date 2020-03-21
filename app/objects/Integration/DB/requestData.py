@@ -25,8 +25,15 @@ def FetchPurchaseData(id=0):
         purchaseid = response['id']
         userid = response['employee']
         description = response['description']
-        items = response['items']
-        comments = response['comments']
+        try:
+            items = json.loads(response['items'])
+        except:
+            items = response['items']
+
+        try:
+            comments = json.loads(response['comments'])
+        except:
+            comments = response['comments']
         status = response['status']
         amount = response['amount']
         supervisor = response['supervisor']
