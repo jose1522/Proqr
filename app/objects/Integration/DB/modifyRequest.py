@@ -3,6 +3,8 @@ from app.objects.sendGrid import SendEmail
 from app.objects.Integration.DB.readKey import readDBKey
 
 #Metodo para modificar el contenido en la base de datos (Solicitudes con sus parametros)
+#Se encarga de modificar los requestes, en este caso permitimos los status y los comentarios
+
 def ModifyRequest(purchaseRequest, userEmail):
     key = readDBKey()
 

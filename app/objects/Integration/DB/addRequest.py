@@ -4,6 +4,8 @@ from app.objects.Integration.DB.readKey import readDBKey
 import json
 
 #Metodo para agregar el contenido a la base de datos (Solicitudes con sus parametros)
+#Método que agrega un request
+
 def AddRequest(purchaseRequest, userEmail):
     key = readDBKey()
 
