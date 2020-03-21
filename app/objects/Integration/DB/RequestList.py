@@ -44,7 +44,10 @@ class RequestList:
                 purchaseid = item['id']
                 userid = item['employee']
                 description = item['description']
-                items = item['items']
+                try:
+                    items = json.loads(item['items'])
+                except:
+                    items = item['items']
                 comments = item['comments']
                 status = item['status']
                 amount = item['amount']
