@@ -4,6 +4,8 @@ from app.objects.Integration.DB.readKey import readDBKey
 from app.objects.user import User
 
 #Metodo para traer los datos de la bases de datos, para rellenar el formulario ya existentes
+#Permite obtener información desde la base de datos relacionada al usuario
+
 def FetchUserData(id=0):
     key = readDBKey()
 

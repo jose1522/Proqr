@@ -2,6 +2,8 @@ import requests
 from app.objects.Integration.DB.readKey import readDBKey
 
 #Metodo para modificar el contenido en la base de datos (Usarios con sus parametros)
+#Se encarga de modidicar el usuario
+
 def ModifyUser(user):
     key = readDBKey()
 

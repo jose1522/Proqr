@@ -1,6 +1,7 @@
 
 #roles es un diccionario que ayuda a la interacción entre el front end y la base de datos
 #esto se debe a que en la base cada rol se guarda con un número que tiene asociado
+#Es utilizada para los usuarios
 roles = {
     'Buyer' : 1,
     'Financial Approver' : 2,

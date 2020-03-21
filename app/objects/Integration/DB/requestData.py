@@ -4,6 +4,8 @@ from app.objects.Integration.DB.readKey import readDBKey
 from app.objects.purchaseRequest import PurchaseRequest
 
 #Metodo para traer los datos de la bases de datos, para rellenar el formulario ya existentes
+#Permite obtener información de un request
+
 def FetchPurchaseData(id=0):
     key = readDBKey()
 
@@ -23,8 +25,15 @@ def FetchPurchaseData(id=0):
         purchaseid = response['id']
         userid = response['employee']
         description = response['description']
-        items = response['items']
-        comments = response['comments']
+        try:
+            items = json.loads(response['items'])
+        except:
+            items = response['items']
+
+        try:
+            comments = json.loads(response['comments'])
+        except:
+            comments = response['comments']
         status = response['status']
         amount = response['amount']
         supervisor = response['supervisor']

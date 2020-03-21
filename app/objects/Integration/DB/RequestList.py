@@ -5,6 +5,8 @@ from app.objects.purchaseRequest import PurchaseRequest
 
 
 #Metodo que trae los datos de la base de datos de los usuarios ya registrados en la aplicacion.
+#Trae desde la base de datos todos los requests
+
 class RequestList:
 
     def __init__(self, userRole=1, userID=0, action=open):
@@ -42,7 +44,10 @@ class RequestList:
                 purchaseid = item['id']
                 userid = item['employee']
                 description = item['description']
-                items = item['items']
+                try:
+                    items = json.loads(item['items'])
+                except:
+                    items = item['items']
                 comments = item['comments']
                 status = item['status']
                 amount = item['amount']

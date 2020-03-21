@@ -3,7 +3,7 @@
 #Si algún valor no se agrega el se encarga de ponerlo vacío
 
 class User:
-#Aqui se define los atributos de los users
+#Aqui se define los atributos de los users, constructor
     def __init__(self, userid="", firstname="", lastname="", email="", password="", role="", supervisor="", status=""):
         self.userId = userid
         self.firstName = firstname

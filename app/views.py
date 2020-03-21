@@ -129,8 +129,8 @@ def newPurchaseRequest():
                                amount='',
                                status='')
 
-
-@app.route("/purchase/<id>") # Dynamic URL that shows a form for any user id
+# Dynamic URL that shows a form for any purchase id
+@app.route("/purchase/<id>")
 @login_required
 def purchase_info(id):
     purchase = FetchPurchaseData(id)
@@ -154,7 +154,7 @@ def purchase_info(id):
                            )
 
 
-
+# Endpoint todos los requests con respecto al usuario de la sesion
 @app.route("/purchase/all")
 @login_required
 def purchase_list():
@@ -164,6 +164,7 @@ def purchase_list():
 
     return render_template("public/purchase_table.html", purchases=plist.purchases,sessionrole=int(session['role']))
 
+# Endpoint todos los requests por un status específico y un usuario
 @app.route("/purchase/all/<status>")
 @login_required
 def filtered_purchase_list(status):
@@ -283,20 +284,8 @@ def reporting():
     return render_template("public/home.html")
 
 
-# @app.route("/user/new")
-# def new_user():
-#     return render_template("public/user_form.html",
-#                            isIndex=True,
-#                            showID = 'none',
-#                            showPassword='flex', # Shows the password field
-#                            userId="",
-#                            firstName="",
-#                            lastName="",
-#                            email="",
-#                            password="")
-
-
-@app.route("/user/<id>") # Dynamic URL that shows a form for any user id
+# Dynamic URL that shows a form for any user id
+@app.route("/user/<id>")
 @login_required
 def user_info(id):
     user = FetchUserData(id)
