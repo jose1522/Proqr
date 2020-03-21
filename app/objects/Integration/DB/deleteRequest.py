@@ -2,6 +2,7 @@ import requests
 from app.objects.Integration.DB.readKey import readDBKey
 
 #Metodo para borrar el contenido en la base de datos (Solicitudes con sus parametros)
+#Manda un request de delete a la base de datos, cambia el estado del request
 def DeleteRequest(purchaseRequest):
     key = readDBKey()
 

@@ -4,6 +4,7 @@ from app.objects.Integration.DB.readKey import readDBKey
 from app.objects.newPassword import CreatePassword
 
 #Metodo para agregar el contenido a la base de datos (Usarios con sus parametros)
+#Método que agrega un usuario
 def AddUser(user):
     key = readDBKey()
 

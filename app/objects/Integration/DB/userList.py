@@ -4,6 +4,8 @@ from app.objects.Integration.DB.readKey import readDBKey
 from app.objects.user import User
 
 #Metodo que trae los datos de la base de datos de los usuarios ya registrados en la aplicacion.
+#Trae una lista de los usuarios
+
 class UserList:
 
     def __init__(self):
