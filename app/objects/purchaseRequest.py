@@ -1,11 +1,13 @@
 #La clase purchaserequest maneja el objeto request
 #Tiene un método que es el constructor
 #Si algún valor no se agrega el se encarga de ponerlo vacío
+#Tiene un método que convierte el timestamp al date
+
 from datetime import datetime
 
 
 class PurchaseRequest:
-#Aqui se define los atributos de los users
+#Aqui se define los atributos de los los requests
     def __init__(self, userid="", requestid="",description="", items="", comments="", amount="", status="", supervisor="", approver="", date=""):
         self.userid = userid
         self.requestid = requestid
@@ -27,3 +29,10 @@ class PurchaseRequest:
         except:
             return  None
 
+    #Método que permite saber si tienen que mostrarse los botones en el form basado en el role
+
+    def isOpen(self,role):
+        if role > self.status or self.status == 1:
+            return True
+        else:
+            return False

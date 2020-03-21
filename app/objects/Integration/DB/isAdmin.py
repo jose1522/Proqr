@@ -3,6 +3,7 @@ import json
 from app.objects.Integration.DB.readKey import readDBKey
 
 #Metodo para modificar el contenido en la base de datos (Usarios con sus parametros)
+#Permite verificar si el usuario es un administrador
 def IsAdmin(userId):
     key = readDBKey()
 

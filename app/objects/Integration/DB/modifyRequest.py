@@ -1,8 +1,12 @@
+import json
 import requests
+from app.objects.Integration.DB.notification import RequestNotification
 from app.objects.sendGrid import SendEmail
 from app.objects.Integration.DB.readKey import readDBKey
 
 #Metodo para modificar el contenido en la base de datos (Solicitudes con sus parametros)
+#Se encarga de modificar los requestes, en este caso permitimos los status y los comentarios
+
 def ModifyRequest(purchaseRequest, userEmail):
     key = readDBKey()
 
@@ -18,12 +22,11 @@ def ModifyRequest(purchaseRequest, userEmail):
 
     response = requests.request("PUT", url, headers=headers)
     #Envio de la confirmacion del cambio en el request al usuario atraves de correo electornico
-    body = 'Your request has been updated' \
-           '' \
-           'PROQR' \
-           '' \
-           'This e-mail message has been delivered from a send-only address. Please do not reply to this message.'
-    SendEmail(sender='noreply@email.com', to=userEmail, subject='Request Update Confirmation', body=body)
+
+    if response.status_code == 200:
+        serverOutput = json.loads(response.text)
+        RequestNotification(purchaseRequest, userEmail, serverOutput)
+
     return response.status_code
 
 
