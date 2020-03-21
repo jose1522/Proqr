@@ -1,6 +1,7 @@
 from app import app
 from flask import render_template, url_for, session, jsonify, make_response, g, redirect, abort, flash
 from functools import wraps
+import datetime
 
 from flask import request as req
 from app.objects.Integration.DB.login import UserLogin
@@ -13,11 +14,19 @@ from app.objects.user import User
 from app.objects.role import roleNumberToString
 from app.objects.role import roleStringToNumber
 from app.objects.role import getRoles
+from app.objects.requestStatus import status
+from app.objects.requestStatus import statusNumberToString
+from app.objects.requestStatus import statusStringToNumber
+from app.objects.requestStatus import getStatus
 from app.objects.Integration.DB.userList import UserList
 from app.objects.purchaseRequest import PurchaseRequest
 from app.objects.Integration.DB.addRequest import AddRequest
 from app.objects.Integration.DB.modifyRequest import ModifyRequest
 from app.objects.Integration.DB.deleteRequest import DeleteRequest
+from app.objects.Integration.DB.myRequestList import MyRequestList
+from app.objects.Integration.DB.RequestList import RequestList
+from app.objects.Integration.DB.requestData import FetchPurchaseData
+from app.objects.Integration.DB.isAdmin import IsAdmin
 
 
 
@@ -46,6 +55,9 @@ def index():
         response = login.Authenticate()
         if response['Result'] == 'TRUE':
             session['user'] = response['Id']
+            session['role'] = response['Role']
+            session['email'] = email
+            session['name'] = response['Name']
             return redirect(url_for('home'))
         else:
             return redirect(url_for('index'))
@@ -81,36 +93,92 @@ def logout():
 @app.route("/home")
 @login_required
 def home():
-    return render_template("public/home.html")
+    return render_template("public/home.html",
+                           role=session['role'],
+                           isAdmin= IsAdmin(session['user']),
+                           name=session['name'])
 
 # Endpoint para generar un nuevo purchase request
-@app.route("/purchase_request/new", methods=['GET','POST'])
+@app.route("/purchase/new", methods=['GET','POST'])
 @login_required
 def newPurchaseRequest():
     if req.method == 'POST':
         form = req.form
-        userid = form['purchaseRequestUserID']
-        description = form['purchaseRequestDescription']
-        items = form['purchaseRequestItems']
-        comments = form['purchaseRequestComments']
-        amount = form['purchaseRequestAmount']
-        status = form['purchaseRequestStatus']
+        userid = form['purchaseUserID']
+        description = form['purchaseDescription']
+        items = form['purchaseItems']
+        comments = form['purchaseComments']
+        amount = form['purchaseAmount']
 
         purchaserequest = PurchaseRequest(userid=userid, description=description, items=items, comments=comments,
-                                          amount=amount, status=status)
-        AddRequest(purchaserequest)
+                                          amount=amount, status = "1")
+        AddRequest(purchaserequest, session['email'])
 
-        return redirect("/purchase_request/all")
+        return redirect(url_for('purchase_list'))
 
     else: #Seccion que muestra un formulario vacio
-        return render_template("public/purchase_request_form.html",
+        return render_template("public/purchase_form.html",
                                isIndex=True,
-                               userid='',
+                               role=session['role'],
+                               showID="none",
+                               showStatus="none",
+                               userid=session['user'],
                                description='',
                                items='',
                                comments='',
                                amount='',
                                status='')
+
+# Dynamic URL that shows a form for any purchase id
+@app.route("/purchase/<id>")
+@login_required
+def purchase_info(id):
+    purchase = FetchPurchaseData(id)
+    return render_template("public/purchase_form.html",
+                           isIndex=False,
+                           showID='flex',
+                           role=session['role'],
+                           descriptionReadOnly='True',
+                           itemsReadOnly='True',
+                           amountReadOnly='True',
+                           requestID=purchase.requestid,
+                           userid=purchase.userid,
+                           description=purchase.description,
+                           items=purchase.items,
+                           comments=purchase.comments,
+                           amount=purchase.amount,
+                           status=statusNumberToString(purchase.status),
+                           statusList=getStatus(),
+                           isOpen=purchase.isOpen(int(session['role'])),
+                           statusid=purchase.status,
+                           )
+
+
+# Endpoint todos los requests con respecto al usuario de la sesion
+@app.route("/purchase/all")
+@login_required
+def purchase_list():
+    user = session['user']
+    plist = MyRequestList(user)
+    plist.FetchPurchaseList()
+
+    return render_template("public/purchase_table.html", purchases=plist.purchases,sessionrole=int(session['role']))
+
+# Endpoint todos los requests por un status específico y un usuario
+@app.route("/purchase/all/<status>")
+@login_required
+def filtered_purchase_list(status):
+    status = str.lower(status)
+    if status in ("open","closed"):
+        user = session['user']
+        role = session['role']
+        plist = RequestList(userRole=role,userID=user,action=status)
+        plist.FetchPurchaseList()
+
+        return render_template("public/purchase_table.html", purchases=plist.purchases, sessionrole=int(session['role']))
+    else:
+        return redirect(url_for('index'))
+
 
 # Endpoint para modificar un purchase request
 @app.route("/purchase_request/modify", methods=['GET','POST'])
@@ -118,18 +186,34 @@ def newPurchaseRequest():
 def modifyPurchaseRequest():
     if req.method == 'POST':
         form = req.form
-        requestid = form['purchaseRequestUserID']
-        description = form['purchaseRequestDescription']
-        items = form['purchaseRequestItems']
-        comments = form['purchaseRequestComments']
-        amount = form['purchaseRequestAmount']
-        status = form['purchaseRequestStatus']
+        requestid = form['formID']
+        userid = form['purchaseUserID']
+        description = form['purchaseDescription']
+        items = form['purchaseItems']
+        comments = form['purchaseComments']
+        amount = form['purchaseAmount']
+
+        if 'approvedBtn' in form:
+            status = session['role']
+        elif 'rejectedBtn' in form:
+            status = "4"
+        else:
+            status = "1"
 
         if requestid:
-            modifyPurchaseRequest = PurchaseRequest(requestid=requestid, description=description, items=items,
-                                              comments=comments, amount=amount, status=status)
-            ModifyRequest(modifyPurchaseRequest)
-            return redirect("/purchase_request/{0}".format(requestid))
+            modifyPurchaseRequest = PurchaseRequest(requestid=requestid,
+                                                    userid=userid,
+                                                    description=description,
+                                                    items=items,
+                                                    comments=comments,
+                                                    amount=amount,
+                                                    status=status)
+            ModifyRequest(modifyPurchaseRequest, session['email'])
+
+            if status in ("2","3","4"):
+                return redirect("/purchase/all/open")
+            else:
+                return redirect("/purchase/{0}".format(requestid))
         else:
             return redirect(url_for('home'))
 
@@ -141,7 +225,8 @@ def modifyPurchaseRequest():
                                items='',
                                comments='',
                                amount='',
-                               status='')
+                               status=statusNumberToString(1),
+                               statusList=getStatus())
 
 # Endpoint para eliminar un purchase request
 @app.route("/purchase_request/delete", methods=['GET','POST'])
@@ -149,12 +234,12 @@ def modifyPurchaseRequest():
 def deletePurchaseRequest():
     if req.method == 'POST':
         form = req.form
-        requestid = form['purchaseRequestUserID']
+        requestid = form['formID']
 
         if requestid:
             deletePurchaseRequest = PurchaseRequest(requestid=requestid, status=0)
             DeleteRequest(deletePurchaseRequest)
-            return redirect("/purchase_request/all".format(requestid))
+            return redirect(url_for('purchase_list'))
         else:
             return redirect(url_for('home'))
 
@@ -199,20 +284,8 @@ def reporting():
     return render_template("public/home.html")
 
 
-# @app.route("/user/new")
-# def new_user():
-#     return render_template("public/user_form.html",
-#                            isIndex=True,
-#                            showID = 'none',
-#                            showPassword='flex', # Shows the password field
-#                            userId="",
-#                            firstName="",
-#                            lastName="",
-#                            email="",
-#                            password="")
-
-
-@app.route("/user/<id>") # Dynamic URL that shows a form for any user id
+# Dynamic URL that shows a form for any user id
+@app.route("/user/<id>")
 @login_required
 def user_info(id):
     user = FetchUserData(id)
@@ -228,6 +301,7 @@ def user_info(id):
                            role=roleNumberToString(user.role),
                            roleList=getRoles())
 
+
 # Endpoint para visualizar todos los usuarios
 @app.route("/user/all")
 @login_required
@@ -236,6 +310,7 @@ def user_list():
     uList.FetchUserList()
 
     return render_template("public/user_table.html", users=uList.users)
+
 
 # Endpoint para modificar un usuario
 @app.route("/user/modify", methods=['GET','POST'])

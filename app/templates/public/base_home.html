@@ -21,8 +21,9 @@
     </ul>
     -->
 
-    <div class="my-auto mr-auto">
-        <a href="/home" class="navbar-brand font-weight-normal text-light" style="margin-right:0px">PROQR</a>
+    <div class="my-auto mr-auto d-flex">
+        <a href="/home" class="navbar-brand font-weight-normal text-light" style="margin-right:10px">PROQR</a>
+        <p class="navbar-brand font-weight-light text-light" > | Welcome {{session['name']}}</p>
     </div>
     {% block nav_bar%}{% endblock %}
     <div class="my-auto">
