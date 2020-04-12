@@ -58,8 +58,15 @@ function closedRequestsTimeline(){
       };
       
       var data = [trace1, trace2];
+
+      var layout = { 
+        title: 'Approved vs Rejected Requests Timeline',
+        font: {size: 12}
+      };
       
-      Plotly.newPlot('closedTimelineChart', data);
+      var config = {responsive: true}
+      
+      Plotly.newPlot('closedTimelineChart', data, layout, config);
 }  
 
 function closedRequestsPieChart(){
@@ -69,12 +76,14 @@ function closedRequestsPieChart(){
         type: 'pie'
       }];
       
-      var layout = {
-        height: 400,
-        width: 500
+      
+      var layout = { 
+        title: 'Chart Title',
+        font: {size: 12}
       };
       
-      Plotly.newPlot('closedPieChart', data, layout);
+      var config = {responsive: true}
+      Plotly.newPlot('closedPieChart', data, layout, config);
 }  
 
 function closedRequestsBarChart(){
@@ -85,6 +94,12 @@ function closedRequestsBarChart(){
           type: 'bar'
         }
       ];
-      
-      Plotly.newPlot('closedBarChart', data);
+            
+      var layout = { 
+        title: 'Chart Title',
+        font: {size: 12}
+      };
+
+      var config = {responsive: true}
+      Plotly.newPlot('closedBarChart', data, layout, config);
 }  

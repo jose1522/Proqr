@@ -6,10 +6,21 @@
 
 {% block home_content %}
 
-<div class="mx-1 mr-8 mb-4 bd-highlight" id="btn_back_form">
+<div class="mr-8 mb-4 bd-highlight" id="btn_back_form">
     <!--<a class="btn btn-secondary" href="{{url_for('user_list')}}">Go back</a>-->
-    <a class="btn btn-secondary btn_back_form" onclick="history.back()" style="color: white !important;">Go back</a>
+    <a class="btn btn-secondary btn_back_form mr-4" onclick="history.back()" style="color: white !important;">Go back</a>
+
+    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-success active">
+            <input type="radio" name="options" id="option1" autocomplete="off" checked> Last 3 Months </label>
+        <label class="btn btn-success">
+            <input type="radio" name="options" id="option2" autocomplete="off"> Last 6 Months </label>
+        <label class="btn btn-success">
+            <input type="radio" name="options" id="option3" autocomplete="off"> Last 12 Months </label>
+    </div>
 </div>
+
+
 
 <div class="d-flex flex-wrap">
 
@@ -19,7 +30,7 @@
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-info mb-1">Approvals (Amount)</div>
+                        <div class="text-xs font-weight-bold text-success mb-1">Approvals (Amount)</div>
                         <div class="h6 mb-0 font-weight-bold text-gray-800">$40,000</div>
                     </div>
                 </div>
@@ -33,7 +44,7 @@
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col">
-                        <div class="text-xs font-weight-bold text-info mb-1">Approvals (Number)</div>
+                        <div class="text-xs font-weight-bold text-success mb-1">Approvals (Number)</div>
                         <div class="h6 mb-0 font-weight-bold text-gray-800">30</div>
                     </div>
                 </div>
@@ -47,14 +58,14 @@
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col">
-                        <div class="text-xs font-weight-bold text-info mb-1">Approval Rate</div>
+                        <div class="text-xs font-weight-bold text-success mb-1">Approval Rate</div>
                         <div class="row no-gutters align-items-center">
                             <div class="col-auto">
                                 <div class="h6 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
                             </div>
                             <div class="col">
                                 <div class="progress progress-sm">
-                                    <div class="progress-bar bg-info" role="progressbar" style="width: 50%"
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 50%"
                                         aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                             </div>
@@ -71,7 +82,7 @@
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col">
-                        <div class="text-xs font-weight-bold text-info mb-1">Pending Requests</div>
+                        <div class="text-xs font-weight-bold text-success mb-1">Pending Requests</div>
                         <div class="h6 mb-0 font-weight-bold text-gray-800">18</div>
                     </div>
                 </div>
@@ -81,32 +92,37 @@
 </div>
 
 
-<div>
-    <div class="card bg-light mb-4">
-        <div class="card-body">
-            <div id='closedTimelineChart'></div>
+<div class="container">
+    <div class="row">
+        <div class="col-sm card bg-light mb-2 mx-2">
+            <div class="card-body">
+                <div id='closedTimelineChart'></div>
+            </div>
+        </div>
+    
+        <div class="col-sm card bg-light mb-2 mx-2">
+            <div class="card-body">
+                <div id='closedBarChart'></div>
+            </div>
         </div>
     </div>
 
-    <!-- <div class="card bg-light mb-4">
-        <div class="card-body">
-            <div id='closedPieChart'></div>
+    <div class="row">
+    
+        <div class="col-sm card bg-light mb-2 mx-2">
+            <div class="card-body">
+                <div id='closedPieChart'></div>
+            </div>
         </div>
-    </div> -->
 
-    <div class="card bg-light mb-4">
-        <div class="card-body">
-            <div id='closedBarChart'></div>
-        </div>
     </div>
-
 </div>
 
 <script type="text/javascript">
     closedRequestsTimeline();
     console.log("closedRequestsTimeline");
-    // closedRequestsPieChart();
-    // console.log("closedRequestsPieChart");
+    closedRequestsPieChart();
+    console.log("closedRequestsPieChart");
     closedRequestsBarChart();
     console.log("closedRequestsBarChart");
 </script>
