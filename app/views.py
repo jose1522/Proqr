@@ -281,7 +281,7 @@ def admin():
 @app.route("/reporting")
 @login_required
 def reporting():
-    return render_template("public/home.html")
+    return render_template("admin/dashboard.html")
 
 
 # Dynamic URL that shows a form for any user id
