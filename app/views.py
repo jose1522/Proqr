@@ -283,13 +283,32 @@ def admin():
 def reporting():
     return render_template("admin/dashboard.html")
 
+@app.route("/data-test")
+def dashboardData():
+    data = {
+        1: {
+            "x": [1, 2, 3, 4, 5, 6],
+            "y": [2, 6, 8, 3, 2, 9]
+        },
+        2: {
+            "x":[11,22,33,44,55],
+            "y":[99,88,77,66,55]
+        },
+        3: {
+            "x":[111,222,333,444],
+            "y":[999,888,777,666]
+        }
+
+    }
+    return data
+
 
 # Dynamic URL that shows a form for any user id
 @app.route("/user/<id>")
 @login_required
 def user_info(id):
     user = FetchUserData(id)
-    return render_template("public/user_form.html",
+    return render_template("public/user_form    .html",
                            isIndex=False,
                            showID='flex',
                            showPassword='none', # Hides password

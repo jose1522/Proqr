@@ -8,15 +8,19 @@
 
 <div class="mr-8 mb-4 bd-highlight" id="btn_back_form">
     <!--<a class="btn btn-secondary" href="{{url_for('user_list')}}">Go back</a>-->
-    <a class="btn btn-secondary btn_back_form mr-4" onclick="history.back()" style="color: white !important;">Go back</a>
+    <a class="btn btn-secondary btn_back_form mr-4" onclick="history.back()" style="color: white !important;">Go
+        back</a>
 
     <div class="btn-group btn-group-toggle" data-toggle="buttons">
         <label class="btn btn-success active">
-            <input type="radio" name="options" id="option1" autocomplete="off" checked> Last 3 Months </label>
+            <input type="radio" name="options" id="option1" autocomplete="off" checked onclick="getData(1)"> Last 3
+            Months </label>
         <label class="btn btn-success">
-            <input type="radio" name="options" id="option2" autocomplete="off"> Last 6 Months </label>
+            <input type="radio" name="options" id="option2" autocomplete="off" onclick="getData(2)"> Last 6 Months
+        </label>
         <label class="btn btn-success">
-            <input type="radio" name="options" id="option3" autocomplete="off"> Last 12 Months </label>
+            <input type="radio" name="options" id="option3" autocomplete="off" onclick="getData(3)"> Last 12 Months
+        </label>
     </div>
 </div>
 
@@ -99,7 +103,7 @@
                 <div id='closedTimelineChart'></div>
             </div>
         </div>
-    
+
         <div class="col-sm card bg-light mb-2 mx-2">
             <div class="card-body">
                 <div id='closedBarChart'></div>
@@ -108,7 +112,7 @@
     </div>
 
     <div class="row">
-    
+
         <div class="col-sm card bg-light mb-2 mx-2">
             <div class="card-body">
                 <div id='closedPieChart'></div>
@@ -119,13 +123,32 @@
 </div>
 
 <script type="text/javascript">
-    closedRequestsTimeline();
-    console.log("closedRequestsTimeline");
-    closedRequestsPieChart();
-    console.log("closedRequestsPieChart");
-    closedRequestsBarChart();
-    console.log("closedRequestsBarChart");
+
+    function updateCharts(data) {
+        console.log(data)
+        closedRequestsTimeline(data);
+        console.log("closedRequestsTimeline");
+        closedRequestsPieChart(data);
+        console.log("closedRequestsPieChart");
+        closedRequestsBarChart(data);
+        console.log("closedRequestsBarChart");
+    }
+
+    function getData(dateRange) {
+        $.ajax({
+            type: "GET",
+            url: "data-test",
+            dataType: "text",
+            success: function (data) {
+                let d = JSON.parse(data);
+                d = d[dateRange]
+                updateCharts(d)
+            }
+        });
+    }
+
+    getData(1);
+
 </script>
-</div>
 
 {% endblock %}

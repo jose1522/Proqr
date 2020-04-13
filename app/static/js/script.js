@@ -12,8 +12,7 @@ function filterUserCards() {
         if (
             title.innerText.toUpperCase().indexOf(filter) > -1 ||
             subtitle.innerText.toUpperCase().indexOf(filter) > -1 ||
-            text.innerText.toUpperCase().indexOf(filter) > -1) 
-        {
+            text.innerText.toUpperCase().indexOf(filter) > -1) {
             cards[i].style.display = "";
         } else {
             cards[i].style.display = "none";
@@ -35,8 +34,7 @@ function filterRequestCards() {
         if (
             title.innerText.toUpperCase().indexOf(filter) > -1 ||
             subtitle.innerText.toUpperCase().indexOf(filter) > -1 ||
-            text.innerText.toUpperCase().indexOf(filter) > -1) 
-        {
+            text.innerText.toUpperCase().indexOf(filter) > -1) {
             cards[i].style.display = "";
         } else {
             cards[i].style.display = "none";
@@ -44,62 +42,64 @@ function filterRequestCards() {
     }
 }
 
-function closedRequestsTimeline(){
+function closedRequestsTimeline(data) {
     var trace1 = {
-        x: [1, 2, 3, 4],
-        y: [10, 15, 13, 17],
+        x: data['x'],
+        y: data['y'],
         type: 'scatter'
-      };
-      
-      var trace2 = {
-        x: [1, 2, 3, 4],
-        y: [16, 5, 11, 9],
-        type: 'scatter'
-      };
-      
-      var data = [trace1, trace2];
+    };
 
-      var layout = { 
+    //   var trace2 = {
+    //     x: [1, 2, 3, 4],
+    //     y: [16, 5, 11, 9],
+    //     type: 'scatter'
+    //   };
+
+    //   var data = [trace1, trace2];
+    var data = [trace1]
+
+    var layout = {
         title: 'Approved vs Rejected Requests Timeline',
-        font: {size: 12}
-      };
-      
-      var config = {responsive: true}
-      
-      Plotly.newPlot('closedTimelineChart', data, layout, config);
-}  
+        font: { size: 12 }
+    };
 
-function closedRequestsPieChart(){
+    var config = { responsive: true, scrollZoom: true }
+
+    Plotly.newPlot('closedTimelineChart', data, layout, config);
+}
+
+function closedRequestsPieChart(data) {
     var data = [{
-        values: [19, 26, 55],
-        labels: ['Residential', 'Non-Residential', 'Utility'],
+        values: data['x'],
+        labels: data['y'],
         type: 'pie'
-      }];
-      
-      
-      var layout = { 
-        title: 'Chart Title',
-        font: {size: 12}
-      };
-      
-      var config = {responsive: true}
-      Plotly.newPlot('closedPieChart', data, layout, config);
-}  
+    }];
 
-function closedRequestsBarChart(){
+
+    var layout = {
+        title: 'Chart Title',
+        font: { size: 12 }
+    };
+
+    var config = { responsive: true, scrollZoom: true }
+    Plotly.newPlot('closedPieChart', data, layout, config);
+}
+
+function closedRequestsBarChart(data) {
     var data = [
         {
-          x: ['giraffes', 'orangutans', 'monkeys'],
-          y: [20, 14, 23],
-          type: 'bar'
+            x: data['x'],
+            y: data['y'],
+            type: 'bar'
         }
-      ];
-            
-      var layout = { 
-        title: 'Chart Title',
-        font: {size: 12}
-      };
+    ];
 
-      var config = {responsive: true}
-      Plotly.newPlot('closedBarChart', data, layout, config);
-}  
+    var layout = {
+        title: 'Chart Title',
+        font: { size: 12 }
+    };
+
+    var config = { responsive: true, scrollZoom: true }
+    Plotly.newPlot('closedBarChart', data, layout, config);
+}
+
