@@ -11,7 +11,9 @@
 
 
 </style>
-<div class="row d-flex justify-content-center">
+
+<div class="d-flex">
+
 
     <!-- This is a card -->
     {% if role in ('1')%}
@@ -64,8 +66,7 @@
                      alt="Card image cap" style="height:200px">
                 <p class="card-text">Select an option from the list below.</p>
                 <div class="list-group list-group-flush">
-                    <a href="#" class="list-group-item list-group-item-action">View requests</a>
-                    <a href="#" class="list-group-item list-group-item-action">View financial report</a>
+                    <a href="{{url_for('reporting')}}" class="list-group-item list-group-item-action">View dashboard</a>
                 </div>
             </div>
         </div>
