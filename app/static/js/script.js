@@ -12,8 +12,7 @@ function filterUserCards() {
         if (
             title.innerText.toUpperCase().indexOf(filter) > -1 ||
             subtitle.innerText.toUpperCase().indexOf(filter) > -1 ||
-            text.innerText.toUpperCase().indexOf(filter) > -1) 
-        {
+            text.innerText.toUpperCase().indexOf(filter) > -1) {
             cards[i].style.display = "";
         } else {
             cards[i].style.display = "none";
@@ -35,12 +34,72 @@ function filterRequestCards() {
         if (
             title.innerText.toUpperCase().indexOf(filter) > -1 ||
             subtitle.innerText.toUpperCase().indexOf(filter) > -1 ||
-            text.innerText.toUpperCase().indexOf(filter) > -1) 
-        {
+            text.innerText.toUpperCase().indexOf(filter) > -1) {
             cards[i].style.display = "";
         } else {
             cards[i].style.display = "none";
         }
     }
+}
+
+function closedRequestsTimeline(data) {
+    var trace1 = {
+        x: data['x'],
+        y: data['y'],
+        type: 'scatter'
+    };
+
+    //   var trace2 = {
+    //     x: [1, 2, 3, 4],
+    //     y: [16, 5, 11, 9],
+    //     type: 'scatter'
+    //   };
+
+    //   var data = [trace1, trace2];
+    var data = [trace1]
+
+    var layout = {
+        title: 'Approved vs Rejected Requests Timeline',
+        font: { size: 12 }
+    };
+
+    var config = { responsive: true, scrollZoom: true }
+
+    Plotly.newPlot('closedTimelineChart', data, layout, config);
+}
+
+function closedRequestsPieChart(data) {
+    var data = [{
+        values: data['x'],
+        labels: data['y'],
+        type: 'pie'
+    }];
+
+
+    var layout = {
+        title: 'Chart Title',
+        font: { size: 12 }
+    };
+
+    var config = { responsive: true, scrollZoom: true }
+    Plotly.newPlot('closedPieChart', data, layout, config);
+}
+
+function closedRequestsBarChart(data) {
+    var data = [
+        {
+            x: data['x'],
+            y: data['y'],
+            type: 'bar'
+        }
+    ];
+
+    var layout = {
+        title: 'Chart Title',
+        font: { size: 12 }
+    };
+
+    var config = { responsive: true, scrollZoom: true }
+    Plotly.newPlot('closedBarChart', data, layout, config);
 }
 

@@ -281,7 +281,26 @@ def admin():
 @app.route("/reporting")
 @login_required
 def reporting():
-    return render_template("public/home.html")
+    return render_template("admin/dashboard.html")
+
+@app.route("/data-test")
+def dashboardData():
+    data = {
+        1: {
+            "x": [1, 2, 3, 4, 5, 6],
+            "y": [2, 6, 8, 3, 2, 9]
+        },
+        2: {
+            "x":[11,22,33,44,55],
+            "y":[99,88,77,66,55]
+        },
+        3: {
+            "x":[111,222,333,444],
+            "y":[999,888,777,666]
+        }
+
+    }
+    return data
 
 
 # Dynamic URL that shows a form for any user id
@@ -289,7 +308,7 @@ def reporting():
 @login_required
 def user_info(id):
     user = FetchUserData(id)
-    return render_template("public/user_form.html",
+    return render_template("public/user_form    .html",
                            isIndex=False,
                            showID='flex',
                            showPassword='none', # Hides password
@@ -397,3 +416,42 @@ def add_user():
                                email="",
                                password="",
                                roleList=getRoles())
+
+labels = [
+    'JAN', 'FEB', 'MAR', 'APR',
+    'MAY', 'JUN', 'JUL', 'AUG',
+    'SEP', 'OCT', 'NOV', 'DEC'
+]
+
+values = [
+    967.67, 1190.89, 1079.75, 1349.19,
+    2328.91, 2504.28, 2873.83, 4764.87,
+    4349.29, 6458.30, 9907, 16297
+]
+
+colors = [
+    "#F7464A", "#46BFBD", "#FDB45C", "#FEDCBA",
+    "#ABCDEF", "#DDDDDD", "#ABCABC", "#4169E1",
+    "#C71585", "#FF4500", "#FEDCBA", "#46BFBD"]
+
+@app.route('/bar')
+def bar():
+    bar_labels=labels
+    bar_values=values
+    return render_template('public/bar_chart.html',
+                           title='Bitcoin Monthly Price in USD',
+                           max=17000,
+                           labels=bar_labels,
+                           values=bar_values)
+
+@app.route('/line')
+def line():
+    line_labels=labels
+    line_values=values
+    return render_template('public/line_chart.html', title='Bitcoin Monthly Price in USD', max=17000, labels=line_labels, values=line_values)
+
+@app.route('/pie')
+def pie():
+    pie_labels = labels
+    pie_values = values
+    return render_template('public/pie_chart.html', title='Bitcoin Monthly Price in USD', max=17000, set=zip(values, labels, colors))
