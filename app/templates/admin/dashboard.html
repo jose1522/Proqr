@@ -13,13 +13,13 @@
 
     <div class="btn-group btn-group-toggle" data-toggle="buttons">
         <label class="btn btn-success active">
-            <input type="radio" name="options" id="option1" autocomplete="off" checked onclick="getData(1)"> Last 3
+            <input type="radio" name="options" id="option1" autocomplete="off" checked onclick="updateCharts(1)"> Last 3
             Months </label>
         <label class="btn btn-success">
-            <input type="radio" name="options" id="option2" autocomplete="off" onclick="getData(2)"> Last 6 Months
+            <input type="radio" name="options" id="option2" autocomplete="off" onclick="updateCharts(2)"> Last 6 Months
         </label>
         <label class="btn btn-success">
-            <input type="radio" name="options" id="option3" autocomplete="off" onclick="getData(3)"> Last 12 Months
+            <input type="radio" name="options" id="option3" autocomplete="off" onclick="updateCharts(3)"> Last 12 Months
         </label>
     </div>
 </div>
@@ -34,8 +34,8 @@
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-success mb-1">Approvals (Amount)</div>
-                        <div class="h6 mb-0 font-weight-bold text-gray-800">$40,000</div>
+                        <div class="text-xs font-weight-bold text-success mb-1">Received Requests (QTY)</div>
+                        <div class="h6 mb-0 font-weight-bold text-gray-800" id="widgetReceived"></div>
                     </div>
                 </div>
             </div>
@@ -48,24 +48,24 @@
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col">
-                        <div class="text-xs font-weight-bold text-success mb-1">Approvals (Number)</div>
-                        <div class="h6 mb-0 font-weight-bold text-gray-800">30</div>
+                        <div class="text-xs font-weight-bold text-success mb-1">Rejected Requests (QTY)</div>
+                        <div class="h6 mb-0 font-weight-bold text-gray-800" id="widgetRejected">30</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Earnings (Monthly) Card Example -->
+    <!-- Earnings (Monthly) Card Example
     <div class="col-xl-3 col-md-6 mb-4">
         <div class="card bg-light border-left-info shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col">
-                        <div class="text-xs font-weight-bold text-success mb-1">Approval Rate</div>
+                        <div class="text-xs font-weight-bold text-success mb-1">Approval Rate (%)</div>
                         <div class="row no-gutters align-items-center">
                             <div class="col-auto">
-                                <div class="h6 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
+                                <div class="h6 mb-0 mr-3 font-weight-bold text-gray-800" id="widgetApprovalRate">50%</div>
                             </div>
                             <div class="col">
                                 <div class="progress progress-sm">
@@ -78,7 +78,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>-->
 
     <!-- Pending Requests Card Example -->
     <div class="col-xl-3 col-md-6 mb-4">
@@ -86,17 +86,33 @@
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col">
-                        <div class="text-xs font-weight-bold text-success mb-1">Pending Requests</div>
-                        <div class="h6 mb-0 font-weight-bold text-gray-800">18</div>
+                        <div class="text-xs font-weight-bold text-success mb-1">Approved Requests (QTY)</div>
+                        <div class="h6 mb-0 font-weight-bold text-gray-800" id="widgetApproved">18</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card bg-light border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col">
+                        <div class="text-xs font-weight-bold text-success mb-1">Pending Requests (QTY)</div>
+                        <div class="h6 mb-0 font-weight-bold text-gray-800" id="widgetPending">18</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 
+
 <div class="container">
+
     <div class="row">
         <div class="col-sm card bg-light mb-2 mx-2">
             <div class="card-body">
@@ -111,27 +127,37 @@
         </div>
     </div>
 
-    <div class="row">
+    {% if role in ('3')%}
 
-        <div class="col-sm card bg-light mb-2 mx-2">
-            <div class="card-body">
-                <div id='closedPieChart'></div>
+        <div class="row">
+
+            <div class="col-sm card bg-light mb-2 mx-2">
+                <div class="card-body">
+                    <div id='closedPieChart'></div>
+                </div>
             </div>
+
         </div>
 
-    </div>
+    {% endif %}
+
 </div>
 
 <script type="text/javascript">
 
-    function updateCharts(data) {
+    function createCharts(data) {
         console.log(data)
-        closedRequestsTimeline(data);
-        console.log("closedRequestsTimeline");
-        closedRequestsPieChart(data);
-        console.log("closedRequestsPieChart");
-        closedRequestsBarChart(data);
+
+        closedRequestsBarChart(data, 'rejectedChart','closedTimelineChart');
         console.log("closedRequestsBarChart");
+        closedRequestsBarChart(data, 'approvedChart','closedBarChart');
+        console.log("closedRequestsBarChart");
+        closedRequestsBarChart(data, 'receivedChart','closedPieChart');
+        console.log("closedRequestsBarChart");
+        document.getElementById('widgetReceived').innerHTML = data['received'];
+        document.getElementById('widgetRejected').innerHTML = data['rejected'];
+        document.getElementById('widgetApproved').innerHTML = data['approvals'];
+        document.getElementById('widgetPending').innerHTML = data['pending'];
     }
 
     function getData(dateRange) {
@@ -141,13 +167,21 @@
             dataType: "text",
             success: function (data) {
                 let d = JSON.parse(data);
+
                 d = d[dateRange]
-                updateCharts(d)
+                createCharts(d)
             }
         });
     }
 
-    getData(1);
+    function updateCharts(dateRange){
+        console.log(dateRange);
+        getData(dateRange);
+        getData(dateRange);
+        getData(dateRange);
+    }
+
+    updateCharts(1);
 
 </script>
 

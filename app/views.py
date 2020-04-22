@@ -29,8 +29,7 @@ from app.objects.Integration.DB.requestData import FetchPurchaseData
 from app.objects.Integration.DB.isAdmin import IsAdmin
 
 
-
-#Este metodo fuerza al usuario a iniciar sesión
+# Este metodo fuerza al usuario a iniciar sesión
 def login_required(f):
     @wraps(f)
     def wrap(*args, **kwargs):
@@ -38,7 +37,9 @@ def login_required(f):
             return f(*args, **kwargs)
         else:
             return redirect(url_for('index'))
+
     return wrap
+
 
 # Endpoint para visualizar la pagina del login.
 @app.route("/", methods=['GET', 'POST'])
@@ -48,10 +49,10 @@ def index():
             return redirect(url_for('home'))
         else:
             return render_template("public/index.html")
-    else: # Instrucciones para metodo post
+    else:  # Instrucciones para metodo post
         email = req.form['inputEmail']
         password = req.form['inputPassword']
-        login = UserLogin(password,email)
+        login = UserLogin(password, email)
         response = login.Authenticate()
         if response['Result'] == 'TRUE':
             session['user'] = response['Id']
@@ -62,17 +63,18 @@ def index():
         else:
             return redirect(url_for('index'))
 
+
 # Endpoint para recuperar contrasenna
 @app.route("/recover_password", methods=['POST'])
 def recover_password():
     form = req.form
     r = req
-    if 'userUserID' in form: # Seccion para cuando se recibe desde editar usuario
+    if 'userUserID' in form:  # Seccion para cuando se recibe desde editar usuario
         id = form['userUserID']
         email = form['userUserEmail']
         u = User(userid=id, email=email)
         RecoverPassword(u)
-    elif 'recoveryEmail' in form: # Seccion para cuando se recibe desde recuperar contrasenna
+    elif 'recoveryEmail' in form:  # Seccion para cuando se recibe desde recuperar contrasenna
         email = form['recoveryEmail']
         u = User(email=email)
         RecoverPassword(u)
@@ -89,17 +91,19 @@ def logout():
     session.clear()
     return render_template("public/index.html")
 
+
 # Endpoint para el landing page
 @app.route("/home")
 @login_required
 def home():
     return render_template("public/home.html",
                            role=session['role'],
-                           isAdmin= IsAdmin(session['user']),
+                           isAdmin=IsAdmin(session['user']),
                            name=session['name'])
 
+
 # Endpoint para generar un nuevo purchase request
-@app.route("/purchase/new", methods=['GET','POST'])
+@app.route("/purchase/new", methods=['GET', 'POST'])
 @login_required
 def newPurchaseRequest():
     if req.method == 'POST':
@@ -111,12 +115,12 @@ def newPurchaseRequest():
         amount = form['purchaseAmount']
 
         purchaserequest = PurchaseRequest(userid=userid, description=description, items=items, comments=comments,
-                                          amount=amount, status = "1")
+                                          amount=amount, status="1")
         AddRequest(purchaserequest, session['email'])
 
         return redirect(url_for('purchase_list'))
 
-    else: #Seccion que muestra un formulario vacio
+    else:  # Seccion que muestra un formulario vacio
         return render_template("public/purchase_form.html",
                                isIndex=True,
                                role=session['role'],
@@ -128,6 +132,7 @@ def newPurchaseRequest():
                                comments='',
                                amount='',
                                status='')
+
 
 # Dynamic URL that shows a form for any purchase id
 @app.route("/purchase/<id>")
@@ -162,26 +167,28 @@ def purchase_list():
     plist = MyRequestList(user)
     plist.FetchPurchaseList()
 
-    return render_template("public/purchase_table.html", purchases=plist.purchases,sessionrole=int(session['role']))
+    return render_template("public/purchase_table.html", purchases=plist.purchases, sessionrole=int(session['role']))
+
 
 # Endpoint todos los requests por un status específico y un usuario
 @app.route("/purchase/all/<status>")
 @login_required
 def filtered_purchase_list(status):
     status = str.lower(status)
-    if status in ("open","closed"):
+    if status in ("open", "closed"):
         user = session['user']
         role = session['role']
-        plist = RequestList(userRole=role,userID=user,action=status)
+        plist = RequestList(userRole=role, userID=user, action=status)
         plist.FetchPurchaseList()
 
-        return render_template("public/purchase_table.html", purchases=plist.purchases, sessionrole=int(session['role']))
+        return render_template("public/purchase_table.html", purchases=plist.purchases,
+                               sessionrole=int(session['role']))
     else:
         return redirect(url_for('index'))
 
 
 # Endpoint para modificar un purchase request
-@app.route("/purchase_request/modify", methods=['GET','POST'])
+@app.route("/purchase_request/modify", methods=['GET', 'POST'])
 @login_required
 def modifyPurchaseRequest():
     if req.method == 'POST':
@@ -210,14 +217,14 @@ def modifyPurchaseRequest():
                                                     status=status)
             ModifyRequest(modifyPurchaseRequest, session['email'])
 
-            if status in ("2","3","4"):
+            if status in ("2", "3", "4"):
                 return redirect("/purchase/all/open")
             else:
                 return redirect("/purchase/{0}".format(requestid))
         else:
             return redirect(url_for('home'))
 
-    else: #Seccion que muestra un formulario vacio
+    else:  # Seccion que muestra un formulario vacio
         return render_template("public/purchase_request_form.html",
                                isIndex=True,
                                requestid='',
@@ -228,8 +235,9 @@ def modifyPurchaseRequest():
                                status=statusNumberToString(1),
                                statusList=getStatus())
 
+
 # Endpoint para eliminar un purchase request
-@app.route("/purchase_request/delete", methods=['GET','POST'])
+@app.route("/purchase_request/delete", methods=['GET', 'POST'])
 @login_required
 def deletePurchaseRequest():
     if req.method == 'POST':
@@ -243,7 +251,7 @@ def deletePurchaseRequest():
         else:
             return redirect(url_for('home'))
 
-    else: #Seccion que muestra un formulario vacio
+    else:  # Seccion que muestra un formulario vacio
         return render_template("public/purchase_request_form.html",
                                isIndex=True,
                                requestid='',
@@ -253,11 +261,13 @@ def deletePurchaseRequest():
                                amount='',
                                status='')
 
+
 # Endpoint para visualizar purchase orders
 @app.route("/purchase_order")
 @login_required
 def purchaseOrder():
     return render_template("public/purchase_form.html")
+
 
 # Endpoint para visualizar requests
 @app.route("/requests")
@@ -265,11 +275,13 @@ def purchaseOrder():
 def request():
     return render_template("public/home.html")
 
+
 # Endpoint para ver el profile
 @app.route("/profile")
 @login_required
 def profile():
     return render_template("public/home.html")
+
 
 # Endpoint para acceder a pagina de admin
 @app.route("/admin")
@@ -277,27 +289,76 @@ def profile():
 def admin():
     return render_template("public/home.html")
 
+
 # Endpoint para acceder a reportes
 @app.route("/reporting")
 @login_required
 def reporting():
-    return render_template("admin/dashboard.html")
+    sessionrole = session['role']
+    return render_template("admin/dashboard.html",
+                           role = sessionrole)
+
 
 @app.route("/data-test")
 def dashboardData():
     data = {
         1: {
+            "receivedChart": {
+            "x": [1, 2, 3, 4, 5, 6],
+            "y": [2, 6, 8, 3, 2, 9],
+
+            },
+            "approvals": 1,
+            "rejected":2,
+            "received":3,
+            "pending":4,
+            "approvalRate":5,
+            "approvedChart": {
+                "x": [11, 22, 33, 44, 55],
+                "y": [99, 88, 77, 66, 55]
+            },
+            "rejectedChart": {
+                "x": [111, 222, 333, 444],
+                "y": [999, 888, 777, 666]
+            }},
+
+        2: {
+            "receivedChart": {
+            "x": [10, 20, 30, 40, 50, 60],
+            "y": [2, 6, 8, 3, 2, 9]
+            },
+            "approvals": 10,
+            "rejected":20,
+            "received":30,
+            "pending":40,
+            "approvalRate":50,
+            "approvedChart": {
+                "x": [110, 220, 330, 440, 550],
+                "y": [99, 88, 77, 66, 55]
+            },
+            "rejectedChart": {
+                "x": [1110, 2220, 3330, 4440],
+                "y": [999, 888, 777, 666]
+            }},
+
+        3: {
+            "receivedChart": {
             "x": [1, 2, 3, 4, 5, 6],
             "y": [2, 6, 8, 3, 2, 9]
-        },
-        2: {
-            "x":[11,22,33,44,55],
-            "y":[99,88,77,66,55]
-        },
-        3: {
-            "x":[111,222,333,444],
-            "y":[999,888,777,666]
-        }
+            },
+            "approvals": 100,
+            "rejected":200,
+            "received":300,
+            "pending":400,
+            "approvalRate":500,
+            "approvedChart": {
+                "x": [11, 22, 33, 44, 55],
+                "y": [99, 88, 77, 66, 55]
+            },
+            "rejectedChart": {
+                "x": [111, 222, 333, 444],
+                "y": [999, 888, 777, 666]
+            }},
 
     }
     return data
@@ -311,7 +372,7 @@ def user_info(id):
     return render_template("public/user_form    .html",
                            isIndex=False,
                            showID='flex',
-                           showPassword='none', # Hides password
+                           showPassword='none',  # Hides password
                            userId=user.userId,
                            firstName=user.firstName,
                            lastName=user.lastName,
@@ -332,7 +393,7 @@ def user_list():
 
 
 # Endpoint para modificar un usuario
-@app.route("/user/modify", methods=['GET','POST'])
+@app.route("/user/modify", methods=['GET', 'POST'])
 @login_required
 def edit_user():
     if req.method == 'POST':
@@ -344,13 +405,14 @@ def edit_user():
         role = form['inputRole']
 
         if id:
-            user = User(userid=id, firstname=name, lastname=lastName, email=email, role=roleStringToNumber(role)) # to do: modify role
+            user = User(userid=id, firstname=name, lastname=lastName, email=email,
+                        role=roleStringToNumber(role))  # to do: modify role
             print(user.role)
             ModifyUser(user)
             return redirect("/user/{0}".format(id))
         else:
             return redirect(url_for('home'))
-    else: # Seccion que muestra un formulario vacio
+    else:  # Seccion que muestra un formulario vacio
         return render_template("public/user_form.html",
                                isIndex=False,
                                showID='flex',
@@ -361,8 +423,9 @@ def edit_user():
                                email="",
                                password="")
 
+
 # Endpoint para eliminar un usuario
-@app.route("/user/delete", methods=['GET','POST'])
+@app.route("/user/delete", methods=['GET', 'POST'])
 @login_required
 def delete_user():
     if req.method == 'POST':
@@ -387,8 +450,9 @@ def delete_user():
                                email="",
                                password="")
 
+
 # Endpoint para agregar un usuario
-@app.route("/user/add", methods=['GET','POST'])
+@app.route("/user/add", methods=['GET', 'POST'])
 @login_required
 def add_user():
     if req.method == 'POST':
@@ -397,12 +461,12 @@ def add_user():
         lastName = form['userUserLastName']
         email = form['userUserEmail']
         role = form['inputRole']
-        
+
         # password = form['userUserPassword'] # Generating password automatically
         user = User(firstname=name, lastname=lastName, email=email, role=roleStringToNumber(role))  # to do: modify role
         print(user.role)
         AddUser(user)
-  
+
         return redirect("/user/all")
 
     else:
@@ -416,6 +480,7 @@ def add_user():
                                email="",
                                password="",
                                roleList=getRoles())
+
 
 labels = [
     'JAN', 'FEB', 'MAR', 'APR',
@@ -434,24 +499,29 @@ colors = [
     "#ABCDEF", "#DDDDDD", "#ABCABC", "#4169E1",
     "#C71585", "#FF4500", "#FEDCBA", "#46BFBD"]
 
+
 @app.route('/bar')
 def bar():
-    bar_labels=labels
-    bar_values=values
+    bar_labels = labels
+    bar_values = values
     return render_template('public/bar_chart.html',
                            title='Bitcoin Monthly Price in USD',
                            max=17000,
                            labels=bar_labels,
                            values=bar_values)
 
+
 @app.route('/line')
 def line():
-    line_labels=labels
-    line_values=values
-    return render_template('public/line_chart.html', title='Bitcoin Monthly Price in USD', max=17000, labels=line_labels, values=line_values)
+    line_labels = labels
+    line_values = values
+    return render_template('public/line_chart.html', title='Bitcoin Monthly Price in USD', max=17000,
+                           labels=line_labels, values=line_values)
+
 
 @app.route('/pie')
 def pie():
     pie_labels = labels
     pie_values = values
-    return render_template('public/pie_chart.html', title='Bitcoin Monthly Price in USD', max=17000, set=zip(values, labels, colors))
+    return render_template('public/pie_chart.html', title='Bitcoin Monthly Price in USD', max=17000,
+                           set=zip(values, labels, colors))
