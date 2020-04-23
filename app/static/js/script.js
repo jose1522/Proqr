@@ -49,13 +49,6 @@ function closedRequestsTimeline(data) {
         type: 'scatter'
     };
 
-    //   var trace2 = {
-    //     x: [1, 2, 3, 4],
-    //     y: [16, 5, 11, 9],
-    //     type: 'scatter'
-    //   };
-
-    //   var data = [trace1, trace2];
     var data = [trace1]
 
     var layout = {
@@ -85,9 +78,10 @@ function closedRequestsPieChart(data) {
     Plotly.newPlot('closedPieChart', data, layout, config);
 }
 
-function closedRequestsBarChart(data, key, id ) {
-    data = data[key]
-    var data = [
+function createBarChart(data, key, id ) {
+    data = data[key];
+    var layout;
+    data = [
         {
             x: data['x'],
             y: data['y'],
@@ -95,8 +89,10 @@ function closedRequestsBarChart(data, key, id ) {
         }
     ];
 
-    if (key == 'rejectedChart'){
-        var layout = {
+    console.log(data);
+
+    if (key === 'RejectedChart'){
+        layout = {
             title: 'Rejected Chart',
             font: { size: 12 },
             xaxis: {
@@ -120,10 +116,10 @@ function closedRequestsBarChart(data, key, id ) {
                 }
              }
         };
-    };
+    }
 
-    if (key == 'receivedChart'){
-        var layout = {
+    if (key === 'ReceivedChart'){
+        layout = {
             title: 'Received Chart',
             font: { size: 12 },
             xaxis: {
@@ -148,10 +144,10 @@ function closedRequestsBarChart(data, key, id ) {
              }
 
         };
-    };
+    }
 
-    if (key == 'approvedChart'){
-        var layout = {
+    if (key === 'ApprovedChart'){
+        layout = {
             title: 'Approved Chart',
             font: { size: 12 },
             xaxis: {
@@ -176,8 +172,6 @@ function closedRequestsBarChart(data, key, id ) {
              }
         };
     }
-
-    console.log(layout);
 
     var config = { responsive: true, scrollZoom: true }
     Plotly.newPlot(id, data, layout, config);
