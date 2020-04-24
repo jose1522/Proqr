@@ -2,6 +2,93 @@
 
 {% block head %}
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<style>
+    .lds-roller {
+        display: inline-block;
+        position: relative;
+        width: 80px;
+        height: 80px;
+    }
+    .lds-roller div {
+        animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        transform-origin: 40px 40px;
+    }
+    .lds-roller div:after {
+        content: " ";
+        display: block;
+        position: absolute;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background:#e0e0e0;
+        /*margin: -4px 0 0 -4px;*/
+    }
+    .lds-roller div:nth-child(1) {
+        animation-delay: -0.036s;
+    }
+    .lds-roller div:nth-child(1):after {
+        top: 63px;
+        left: 63px;
+    }
+    .lds-roller div:nth-child(2) {
+        animation-delay: -0.072s;
+    }
+    .lds-roller div:nth-child(2):after {
+        top: 68px;
+        left: 56px;
+    }
+    .lds-roller div:nth-child(3) {
+        animation-delay: -0.108s;
+    }
+    .lds-roller div:nth-child(3):after {
+        top: 71px;
+        left: 48px;
+    }
+    .lds-roller div:nth-child(4) {
+        animation-delay: -0.144s;
+    }
+    .lds-roller div:nth-child(4):after {
+        top: 72px;
+        left: 40px;
+    }
+    .lds-roller div:nth-child(5) {
+        animation-delay: -0.18s;
+    }
+    .lds-roller div:nth-child(5):after {
+        top: 71px;
+        left: 32px;
+    }
+    .lds-roller div:nth-child(6) {
+        animation-delay: -0.216s;
+    }
+    .lds-roller div:nth-child(6):after {
+        top: 68px;
+        left: 24px;
+    }
+    .lds-roller div:nth-child(7) {
+        animation-delay: -0.252s;
+    }
+    .lds-roller div:nth-child(7):after {
+        top: 63px;
+        left: 17px;
+    }
+    .lds-roller div:nth-child(8) {
+        animation-delay: -0.288s;
+    }
+    .lds-roller div:nth-child(8):after {
+        top: 56px;
+        left: 12px;
+    }
+    @keyframes lds-roller {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+</style>
 {% endblock %}
 
 {% block home_content %}
@@ -13,59 +100,74 @@
 
     <div class="btn-group btn-group-toggle" data-toggle="buttons">
         <label class="btn btn-success active">
-            <input type="radio" name="options" id="option1" autocomplete="off" checked onclick="getData(1)"> Last 3
+            <input type="radio" name="options" id="option1" autocomplete="off" checked onclick="updateCharts('3')"> Last 3
             Months </label>
         <label class="btn btn-success">
-            <input type="radio" name="options" id="option2" autocomplete="off" onclick="getData(2)"> Last 6 Months
+            <input type="radio" name="options" id="option2" autocomplete="off" onclick="updateCharts('6')"> Last 6 Months
         </label>
         <label class="btn btn-success">
-            <input type="radio" name="options" id="option3" autocomplete="off" onclick="getData(3)"> Last 12 Months
+            <input type="radio" name="options" id="option3" autocomplete="off" onclick="updateCharts('12')"> Last 12 Months
         </label>
     </div>
 </div>
 
+<div id="widgetsBar" class="d-flex flex-wrap">
 
-
-<div class="d-flex flex-wrap">
-
+    {% if role == '3'%}
     <!-- Earnings (Monthly) Card Example -->
     <div class="col-xl-3 col-md-6 mb-4">
         <div class="card bg-light border-left-primary shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-success mb-1">Approvals (Amount)</div>
-                        <div class="h6 mb-0 font-weight-bold text-gray-800">$40,000</div>
+                        <div class="text-xs font-weight-bold text-success mb-1">Approved Value ($)</div>
+                        <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                        <div class="h6 mb-0 font-weight-bold text-gray-800 widget" id="widgetApprovedValue"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
+    {%else%}
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card bg-light border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success mb-1">Received Requests (QTY)</div>
+                        <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                        <div class="h6 mb-0 font-weight-bold text-gray-800 widget" id="widgetReceived"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {%endif%}
     <!-- Earnings (Monthly) Card Example -->
     <div class="col-xl-3 col-md-6 mb-4">
         <div class="card bg-light border-left-success shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col">
-                        <div class="text-xs font-weight-bold text-success mb-1">Approvals (Number)</div>
-                        <div class="h6 mb-0 font-weight-bold text-gray-800">30</div>
+                        <div class="text-xs font-weight-bold text-success mb-1">Rejected Requests (QTY)</div>
+                        <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                        <div class="h6 mb-0 font-weight-bold text-gray-800 widget" id="widgetRejected"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Earnings (Monthly) Card Example -->
+    <!-- Earnings (Monthly) Card Example
     <div class="col-xl-3 col-md-6 mb-4">
         <div class="card bg-light border-left-info shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col">
-                        <div class="text-xs font-weight-bold text-success mb-1">Approval Rate</div>
+                        <div class="text-xs font-weight-bold text-success mb-1">Approval Rate (%)</div>
                         <div class="row no-gutters align-items-center">
                             <div class="col-auto">
-                                <div class="h6 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
+                                <div class="h6 mb-0 mr-3 font-weight-bold text-gray-800" id="widgetApprovalRate">50%</div>
                             </div>
                             <div class="col">
                                 <div class="progress progress-sm">
@@ -78,7 +180,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>-->
 
     <!-- Pending Requests Card Example -->
     <div class="col-xl-3 col-md-6 mb-4">
@@ -86,68 +188,110 @@
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col">
-                        <div class="text-xs font-weight-bold text-success mb-1">Pending Requests</div>
-                        <div class="h6 mb-0 font-weight-bold text-gray-800">18</div>
+                        <div class="text-xs font-weight-bold text-success mb-1">Approved Requests (QTY)</div>
+                        <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                        <div class="h6 mb-0 font-weight-bold text-gray-800 widget" id="widgetApproved"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card bg-light border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col">
+                        <div class="text-xs font-weight-bold text-success mb-1">Pending Requests (QTY)</div>
+                        <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                        <div class="h6 mb-0 font-weight-bold text-gray-800 widget" id="widgetPending"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
+<div id="chartContainer" class="container">
 
-<div class="container">
     <div class="row">
         <div class="col-sm card bg-light mb-2 mx-2">
             <div class="card-body">
-                <div id='closedTimelineChart'></div>
+                <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                <div class="chart" id='closedTimelineChart'></div>
             </div>
         </div>
 
         <div class="col-sm card bg-light mb-2 mx-2">
             <div class="card-body">
-                <div id='closedBarChart'></div>
+                <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                <div class="chart" id='closedBarChart'></div>
             </div>
         </div>
     </div>
 
-    <div class="row">
+    {% if role in ('3')%}
 
-        <div class="col-sm card bg-light mb-2 mx-2">
-            <div class="card-body">
-                <div id='closedPieChart'></div>
+        <div class="row">
+
+            <div class="col-sm card bg-light mb-2 mx-2">
+                <div class="card-body">
+                    <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                    <div class="chart" id='closedPieChart'></div>
+                </div>
             </div>
+
         </div>
 
-    </div>
+    {% endif %}
+
 </div>
 
 <script type="text/javascript">
 
-    function updateCharts(data) {
-        console.log(data)
-        closedRequestsTimeline(data);
-        console.log("closedRequestsTimeline");
-        closedRequestsPieChart(data);
-        console.log("closedRequestsPieChart");
-        closedRequestsBarChart(data);
-        console.log("closedRequestsBarChart");
+    function createCharts(data) {
+        createBarChart(data, 'RejectedChart','closedTimelineChart');
+        createBarChart(data, 'ApprovedChart','closedBarChart');
+
+        document.getElementById('widgetRejected').innerHTML = data['RejectedCount'];
+        document.getElementById('widgetApproved').innerHTML = data['ApprovedCount'];
+        document.getElementById('widgetPending').innerHTML = data['PendingCount'];
+        {% if role == '3' %}
+        document.getElementById('widgetApprovedValue').innerHTML = data['ApprovedSum'];
+        createBarChart(data, 'RecievedChart','closedPieChart');
+        {% else %}
+        document.getElementById('widgetReceived').innerHTML = data['RecievedCount'];
+        {% endif %}
     }
 
+
     function getData(dateRange) {
-        $.ajax({
+        $(".lds-roller").show()
+        $(".widget").hide()
+        $(".chart").hide()
+        $.ajax("data-test",{
             type: "GET",
-            url: "data-test",
             dataType: "text",
+            timeout: 1000,
             success: function (data) {
                 let d = JSON.parse(data);
                 d = d[dateRange]
-                updateCharts(d)
+                console.log(d)
+                $(".lds-roller").hide()
+                $(".widget").show()
+                $(".chart").show()
+                createCharts(d)
             }
         });
     }
 
-    getData(1);
+    function updateCharts(dateRange){
+        getData(dateRange);
+        getData(dateRange);
+        getData(dateRange);
+    }
+    getData('3')
 
 </script>
 

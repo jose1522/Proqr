@@ -49,13 +49,6 @@ function closedRequestsTimeline(data) {
         type: 'scatter'
     };
 
-    //   var trace2 = {
-    //     x: [1, 2, 3, 4],
-    //     y: [16, 5, 11, 9],
-    //     type: 'scatter'
-    //   };
-
-    //   var data = [trace1, trace2];
     var data = [trace1]
 
     var layout = {
@@ -85,8 +78,10 @@ function closedRequestsPieChart(data) {
     Plotly.newPlot('closedPieChart', data, layout, config);
 }
 
-function closedRequestsBarChart(data) {
-    var data = [
+function createBarChart(data, key, id ) {
+    data = data[key];
+    var layout;
+    data = [
         {
             x: data['x'],
             y: data['y'],
@@ -94,12 +89,92 @@ function closedRequestsBarChart(data) {
         }
     ];
 
-    var layout = {
-        title: 'Chart Title',
-        font: { size: 12 }
-    };
+    console.log(data);
+
+    if (key === 'RejectedChart'){
+        layout = {
+            title: 'Rejected Chart',
+            font: { size: 12 },
+            xaxis: {
+                title: {
+                    text: 'Months',
+                 font: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f'
+                        }
+                    },
+            },
+            yaxis: {
+                title: {
+                    text: 'Rejected Requests',
+                font: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f'
+                    }
+                }
+             }
+        };
+    }
+
+    if (key === 'ReceivedChart'){
+        layout = {
+            title: 'Received Chart',
+            font: { size: 12 },
+            xaxis: {
+                title: {
+                    text: 'Months',
+                 font: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f'
+                        }
+                    },
+            },
+            yaxis: {
+                title: {
+                    text: 'Received Requests',
+                font: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f'
+                    }
+                }
+             }
+
+        };
+    }
+
+    if (key === 'ApprovedChart'){
+        layout = {
+            title: 'Approved Chart',
+            font: { size: 12 },
+            xaxis: {
+                title: {
+                    text: 'Months',
+                 font: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f'
+                        }
+                    },
+            },
+            yaxis: {
+                title: {
+                    text: 'Approved Requests',
+                font: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f'
+                    }
+                }
+             }
+        };
+    }
 
     var config = { responsive: true, scrollZoom: true }
-    Plotly.newPlot('closedBarChart', data, layout, config);
+    Plotly.newPlot(id, data, layout, config);
+
 }
 
