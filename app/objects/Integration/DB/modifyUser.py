@@ -17,7 +17,6 @@ def ModifyUser(user):
         'X-ROLE': str(user.role),
         'X-STATUS': user.status,
 
-
         'Authorization': "Basic {0}".format(key)
     }
 
