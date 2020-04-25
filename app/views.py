@@ -27,6 +27,7 @@ from app.objects.Integration.DB.myRequestList import MyRequestList
 from app.objects.Integration.DB.RequestList import RequestList
 from app.objects.Integration.DB.requestData import FetchPurchaseData
 from app.objects.Integration.DB.isAdmin import IsAdmin
+from app.objects.Integration.DB.stats import Stats
 
 
 # Este metodo fuerza al usuario a iniciar sesión
@@ -294,73 +295,16 @@ def admin():
 @app.route("/reporting")
 @login_required
 def reporting():
-    sessionrole = session['role']
     return render_template("admin/dashboard.html",
-                           role = sessionrole)
+                           role = session['role'])
 
 
 @app.route("/data-test")
+@login_required
 def dashboardData():
-    data = {
-        1: {
-            "receivedChart": {
-            "x": [1, 2, 3, 4, 5, 6],
-            "y": [2, 6, 8, 3, 2, 9],
 
-            },
-            "approvals": 1,
-            "rejected":2,
-            "received":3,
-            "pending":4,
-            "approvalRate":5,
-            "approvedChart": {
-                "x": [11, 22, 33, 44, 55],
-                "y": [99, 88, 77, 66, 55]
-            },
-            "rejectedChart": {
-                "x": [111, 222, 333, 444],
-                "y": [999, 888, 777, 666]
-            }},
-
-        2: {
-            "receivedChart": {
-            "x": [10, 20, 30, 40, 50, 60],
-            "y": [2, 6, 8, 3, 2, 9]
-            },
-            "approvals": 10,
-            "rejected":20,
-            "received":30,
-            "pending":40,
-            "approvalRate":50,
-            "approvedChart": {
-                "x": [110, 220, 330, 440, 550],
-                "y": [99, 88, 77, 66, 55]
-            },
-            "rejectedChart": {
-                "x": [1110, 2220, 3330, 4440],
-                "y": [999, 888, 777, 666]
-            }},
-
-        3: {
-            "receivedChart": {
-            "x": [1, 2, 3, 4, 5, 6],
-            "y": [2, 6, 8, 3, 2, 9]
-            },
-            "approvals": 100,
-            "rejected":200,
-            "received":300,
-            "pending":400,
-            "approvalRate":500,
-            "approvedChart": {
-                "x": [11, 22, 33, 44, 55],
-                "y": [99, 88, 77, 66, 55]
-            },
-            "rejectedChart": {
-                "x": [111, 222, 333, 444],
-                "y": [999, 888, 777, 666]
-            }},
-
-    }
+    data = Stats(session['role'], session['user'])
+    data = data.GetData()
     return data
 
 
@@ -369,7 +313,7 @@ def dashboardData():
 @login_required
 def user_info(id):
     user = FetchUserData(id)
-    return render_template("public/user_form    .html",
+    return render_template("public/user_form.html",
                            isIndex=False,
                            showID='flex',
                            showPassword='none',  # Hides password

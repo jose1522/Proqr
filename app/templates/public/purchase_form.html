@@ -20,6 +20,7 @@
 
 
             <!-- Start of form row -->
+
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label for="purchaseDescription">Description</label>
@@ -66,7 +67,7 @@
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label for="purchaseAmount">Amount</label>
-                    <input type="number" class="form-control" placeholder="Enter the total amount in USD" name="purchaseAmount" value="{{amount}}"
+                    <input type="number" class="form-control" placeholder="Enter the total amount in USD" name="purchaseAmount" pattern="^[0-9]*$" title="Just numbers permitted" value="{{amount}}"
                     {% if amountReadOnly=='True' %} readonly {% endif %}
                     >
                 </div>
