@@ -33,21 +33,24 @@ class Stats:
 
     def __TransformData(self):
         data = self.__SendRequest()
-        if data and len(data['items'])>0:
-            ranges = [3,6,12]
+        if data and len(data['items'])>0: #Revisa si la cantidad de resultados en items es mayor a 0
+            ranges = [3,6,12] #Crea lista de rangos y estatus para iterar
             status = ['Approved','Pending','Rejected']
             dataByRanges = {}
             df = pd.DataFrame(data['items'])
-            for period in ranges:
+            for period in ranges:  #Crea una llave para cada rango filtrando la data por la fecha
                 rangeDictionary = {}
                 monthInRange = df['month']
                 monthInRange = monthInRange <= period
                 filteredByMonth = df[monthInRange]
-                filteredByMonth = filteredByMonth.rename(columns={"month": "x", "count": "y"})
+                filteredByMonth = filteredByMonth.rename(columns={"month": "x", "count": "y"}) #renombra las columnas de mes y cantidad a 'x' y 'y', respectivamente
+
+                #Crea 3 llaves nuevas, una de ellas siendo un diccionario anidado.
                 rangeDictionary['RecievedChart'] = filteredByMonth.groupby(['x']).agg('sum').reset_index().drop(columns=['amount'], axis=1).to_dict('list')
                 rangeDictionary['RecievedSum'] = "${:,}".format(filteredByMonth['amount'].sum())
                 rangeDictionary['RecievedCount'] = str(filteredByMonth['y'].sum())
                 for item in status:
+                    # Crea 3 llaves nuevas, una de ellas siendo un diccionario anidado.
                     filteredData = filteredByMonth[filteredByMonth['status']==item].drop('status', 1)
                     rangeDictionary[item+'Chart'] = filteredData.groupby(['x']).agg('sum').reset_index().drop('amount', axis=1).to_dict('list')
                     rangeDictionary[item + 'Sum'] = "${:,}".format(filteredData['amount'].sum())

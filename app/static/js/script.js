@@ -1,3 +1,5 @@
+//Funcion que permite filtrar en los User cards. Utiliza JS para obtener los componentes
+
 function filterUserCards() {
     var input, filter, cards, cardContainer, h5, title, i;
     input = document.getElementById("userCardFilter");
@@ -19,6 +21,8 @@ function filterUserCards() {
         }
     }
 }
+
+//Funcion que permite filtrar en los Request cards. Utiliza JS para obtener los componentes
 
 function filterRequestCards() {
     var input, filter, cards, cardContainer, h5, title, i;
@@ -42,6 +46,9 @@ function filterRequestCards() {
     }
 }
 
+//Permite crear un TimeLine chart de los Requests por medio de plotly
+//Recibe la data que va a ser utilizada para alimentarla
+
 function closedRequestsTimeline(data) {
     var trace1 = {
         x: data['x'],
@@ -60,6 +67,9 @@ function closedRequestsTimeline(data) {
 
     Plotly.newPlot('closedTimelineChart', data, layout, config);
 }
+//Permite crear un Pie chart de los Requests por medio de plotly
+//Recibe la data que va a ser utilizada para alimentarla
+
 
 function closedRequestsPieChart(data) {
     var data = [{
@@ -77,6 +87,11 @@ function closedRequestsPieChart(data) {
     var config = { responsive: true, scrollZoom: true }
     Plotly.newPlot('closedPieChart', data, layout, config);
 }
+
+//Permite crear un TimeLine chart de los Requests por medio de plotly
+//Recibe la data que va a ser utilizada para alimentarla
+//Por medio del key se accesa la data que se necesita en específico
+//El id permite decirle a cuál gráfico se le quiere aplicar
 
 function createBarChart(data, key, id ) {
     data = data[key];
@@ -118,7 +133,7 @@ function createBarChart(data, key, id ) {
         };
     }
 
-    if (key === 'ReceivedChart'){
+    if (key === 'RecievedChart'){
         layout = {
             title: 'Received Chart',
             font: { size: 12 },
