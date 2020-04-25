@@ -133,7 +133,7 @@ function createBarChart(data, key, id ) {
         };
     }
 
-    if (key === 'ReceivedChart'){
+    if (key === 'RecievedChart'){
         layout = {
             title: 'Received Chart',
             font: { size: 12 },
