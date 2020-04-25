@@ -15,7 +15,7 @@
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label for="userUserFirstName">First Name</label>
-                    <input class="form-control" type="text" name="userUserFirstName" placeholder="Enter the user's first name" value="{{ firstName }}">
+                    <input class="form-control" type="text" name="userUserFirstName" pattern="^([a-zA-Z '-]+)$" title="Just letters permitted" placeholder="Enter the user's first name" value="{{ firstName }}">
                 </div>
             </div>
             <!-- End of form row -->
@@ -24,7 +24,7 @@
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label for="userUserLastName">Last Name</label>
-                    <input class="form-control" type="text" name="userUserLastName" placeholder="Enter the user's last name" value="{{ lastName }}">
+                    <input class="form-control" type="text" name="userUserLastName" pattern="^([a-zA-Z '-]+)$" title="Just letters permitted" placeholder="Enter the user's last name" value="{{ lastName }}">
                 </div>
             </div>
             <!-- End of form row -->
@@ -33,7 +33,7 @@
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label for="userUserEmail">Email</label>
-                    <input class="form-control" type="text" name="userUserEmail" placeholder="Enter the user's email" value="{{ email }}">
+                    <input class="form-control" type="text" name="userUserEmail" pattern=^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$" title="El dominio de su correo no es valido" placeholder="Enter the user's email" value="{{ email }}">
                 </div>
             </div>
             <!-- End of form row -->

@@ -1,41 +1,41 @@
 from app.objects.sendGrid import SendEmail
 
-#Metodo para enviar los correos de notificacion basado en el status del request
+#Metodo para recuperar contrasena de los usuarios
 def RequestNotification(purchaseRequest, userEmail, serverOutput):
-    supervisorEmail = serverOutput['EMAIL_SUP']
-    approverEmail = serverOutput['EMAIL']
-    requestID = serverOutput['ID']
-    if purchaseRequest == "4":
-        body = """Your request {0} has been rejected.
-        
-        Link to Request: 
-        http://127.0.0.1:5000/purchase/{0}
-        
-        This e-mail message has been delivered from a send-only address. Please do not reply to this message
-        """.format(requestID, purchaseRequest.approver)
+    values = serverOutput.keys()
+    supervisorEmail = (serverOutput['X-SUPERVISOR']) if 'X-SUPERVISOR' in values else ''
+    requestID = (serverOutput['X-REQUEST_ID']) if 'X-REQUEST_ID' in values else ''
+    approverEmail = (serverOutput['X-APPROVER']) if 'X-APPROVER' in values else ''
 
-        SendEmail(sender='noreply@email.com', to=(userEmail, supervisorEmail, approverEmail), subject='Request Rejected',
+    if purchaseRequest.status == '4':
+        body = 'Your request {0} has been rejected by {1}'.format(requestID, purchaseRequest.approver) + '' \
+        '' \
+        'PROQR' \
+        '' \
+        'This e-mail message has been delivered from a send-only address. Please do not reply to this message.'
+
+        SendEmail(sender='noreply@email.com', to=(userEmail, supervisorEmail, approverEmail), subject='Request Approval Confirmation',
                   body=body)
 
-    elif purchaseRequest.status == "3":
-        body = 'Request {0} has been approved by {1}'.format(requestID, approverEmail) + '' \
+    elif purchaseRequest.status == '3':
+        body = 'Your request {0} has been approved by {1}'.format(requestID, purchaseRequest.approver) + '' \
                '' \
                'PROQR' \
                '' \
                'This e-mail message has been delivered from a send-only address. Please do not reply to this message.'
 
-        SendEmail(sender='noreply@email.com', to= (userEmail, approverEmail), subject='Request Financial Approval Confirmation', body=body)
+        SendEmail(sender='noreply@email.com', to= (userEmail, approverEmail) , subject='Request Approval Confirmation', body=body)
 
-    elif purchaseRequest.status == "2":
-        body = 'Request {0} has been approved by {1} and it awaiting for financial approval'.format(requestID, supervisorEmail) + '' \
+    elif purchaseRequest.status == '2':
+        body = 'Your request {0} has been approved by {1}'.format(requestID, purchaseRequest.supervisor) + '' \
                 '' \
                 'PROQR' \
                 '' \
                 'This e-mail message has been delivered from a send-only address. Please do not reply to this message.'
-        SendEmail(sender='noreply@email.com', to= (userEmail, supervisorEmail, approverEmail) , subject='Request Approval Confirmation', body=body)
+        SendEmail(sender='noreply@email.com', to= (userEmail, supervisorEmail, approverEmail) , subject='Request Financial Approval Confirmation', body=body)
 
-    elif purchaseRequest.status == "1":
-        body = 'Your request {0} has been submitted successfully and awaiting for approval'.format(requestID) + '' \
+    elif purchaseRequest.status == '1':
+        body = 'Your request {0} has been submitted successfully'.format(requestID) + '' \
                '' \
                'PROQR' \
                '' \
